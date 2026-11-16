@@ -1,0 +1,33 @@
+---
+import { SITE, CATEGORIES, SOCIALS, AUTHOR } from '../data/site';
+---
+<footer class="site-footer">
+  <div class="wrap footer-in">
+    <div class="footer-brand">
+      <img src="/img/mascota.webp" alt="Mascota de noticiasde.ia" width="140" />
+      <p class="footer-name">noticiasde<em>.ia</em></p>
+      <p class="hand">escrito a mano, sin IA</p>
+    </div>
+    <div>
+      <h4>Yo</h4>
+      <ul>
+        <li><a href="/">Mi historia</a></li>
+        <li><a href="/#proyectos">Proyectos</a></li>
+        <li><a href="/#github">GitHub</a></li>
+        <li><a href="/escrito-a-mano/">Por qué escribo a mano</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Artículos</h4>
+      <ul>{Object.entries(CATEGORIES).slice(0, 6).map(([k, c]) => <li><a href={`/categoria/${k}/`}>{c.name}</a></li>)}<li><a href="/rss.xml">RSS</a></li></ul>
+    </div>
+    <div>
+      <h4>Redes</h4>
+      <ul>{SOCIALS.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.name}</a></li>)}</ul>
+    </div>
+  </div>
+  <div class="wrap footer-legal">
+    <span>© {new Date().getFullYear()} {AUTHOR.name} · {SITE.name}</span>
+    <span>Hecho con Astro. Sin cookies de seguimiento.</span>
+  </div>
+</footer>

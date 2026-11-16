@@ -1,0 +1,16 @@
+---
+// Hueco para una foto. Si `img` tiene ruta, se muestra la foto.
+interface Props { img?: string | null; label: string; ratio?: string; hint?: string; href?: string; class?: string }
+const { img, label, ratio = '9/16', hint = 'Pon aquí tu foto', href, class: cls = '' } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+<Tag class={`ph ${cls}`} style={`aspect-ratio:${ratio}`} href={href} target={href && href.startsWith('http') ? '_blank' : undefined} rel={href ? 'noopener' : undefined}>
+  {img ? <img src={img} alt={label} loading="lazy" /> : (
+    <div class="ph-empty">
+      <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M3.5 7.5h3.2l1.8-2.7h7l1.8 2.7h3.2v12h-17z"/><circle cx="12" cy="13.2" r="3.6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      <span class="ph-hint">{hint}</span>
+      <span class="ph-ratio">{ratio.replace('/', ':')}</span>
+    </div>
+  )}
+  {label && <span class="ph-label">{label}</span>}
+</Tag>

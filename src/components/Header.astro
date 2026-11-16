@@ -1,0 +1,21 @@
+---
+const path = Astro.url.pathname;
+const links = [
+  { href: '/', label: 'Mi historia', on: path === '/' || path === '/index.html' },
+  { href: '/#proyectos', label: 'Proyectos', on: false },
+  { href: '/articulos/', label: 'Artículos', on: path.startsWith('/articulos') || path.startsWith('/categoria') },
+  { href: '/#redes', label: 'Redes', on: false },
+];
+---
+<header class="site-header">
+  <div class="wrap header-in">
+    <a class="logo" href="/">
+      <img src="/img/mascota-cara.png" alt="" width="40" height="40" />
+      <span>noticiasde<em>.ia</em></span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      {links.map((l) => <a href={l.href} aria-current={l.on ? 'page' : undefined}>{l.label}</a>)}
+    </nav>
+    <a class="btn btn-sm" href="/articulos/">Leer el blog</a>
+  </div>
+</header>

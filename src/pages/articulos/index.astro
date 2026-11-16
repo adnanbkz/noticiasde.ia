@@ -1,0 +1,66 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { CATEGORIES, type CatId } from '../../data/site';
+const all = (await getCollection('articulos', ({ data }) => !data.draft)).sort((a, b) => +b.data.date - +a.data.date);
+const hero = all.find((p) => p.data.featured) ?? all[0];
+const side = all.filter((p) => p !== hero).slice(0, 4);
+const bands: CatId[] = ['agentes', 'cloud', 'seguridad', 'camino'];
+const byCat = (k: CatId) => all.filter((p) => p.data.category === k && p !== hero);
+const counts = Object.fromEntries(Object.keys(CATEGORIES).map((k) => [k, all.filter((p) => p.data.category === k).length]));
+const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+---
+<Base title="Artículos" description="Artículos sobre IA, cloud y desarrollo, escritos a mano por Adnan.">
+  <div class="ticker-bar">
+    <div class="wrap ticker">
+      <span class="ticker-label">Lo último</span>
+      <div class="ticker-track"><div class="ticker-run">
+        {[...all.slice(0, 6), ...all.slice(0, 6)].map((p) => <a href={`/articulos/${p.id}/`}><b>{fmt(p.data.date)}</b>{p.data.title}</a>)}
+      </div></div>
+    </div>
+  </div>
+
+  <section class="wrap mag-head">
+    <h1>Artículos</h1>
+    <p class="lead">IA, cloud y desarrollo explicados por un developer. Todos escritos a mano: la investigación, las frases y los errores son míos.</p>
+  </section>
+
+  <section class="wrap hero">
+    <PostCard post={hero} variant="overlay" mascot />
+    <aside class="hero-side">
+      <h2 class="side-title">Recién escrito</h2>
+      {side.map((p) => <PostCard post={p} variant="row" />)}
+    </aside>
+  </section>
+
+  <nav class="wrap cat-pills" aria-label="Secciones">
+    {Object.entries(CATEGORIES).map(([k, c]) => (
+      <a href={`/categoria/${k}/`} style={`--c:${c.color}`}><span class="dot"></span>{c.name}<span class="n">{counts[k]}</span></a>
+    ))}
+  </nav>
+
+  {bands.map((k, i) => { const ps = byCat(k); if (!ps.length) return null; const c = CATEGORIES[k]; return (
+    <section class={`wrap band ${i % 2 ? 'band-rev' : ''}`} style={`--c:${c.color}`}>
+      <div class="band-head"><h2 class="section-title"><span class="dot"></span>{c.name}</h2><p>{c.blurb}</p><a class="arrow-link" href={`/categoria/${k}/`}>Ver sección</a></div>
+      <div class="band-grid">
+        <PostCard post={ps[0]} variant="big" />
+        <div class="band-list">{ps.slice(1, 4).map((p) => <PostCard post={p} variant="row" />)}</div>
+      </div>
+    </section>); })}
+
+  <section class="wrap archive">
+    <h2 class="section-title">Todos los artículos</h2>
+    <div class="filters" role="group" aria-label="Filtrar por sección">
+      <button type="button" class="on" data-f="all">Todo</button>
+      {Object.entries(CATEGORIES).map(([k, c]) => <button type="button" data-f={k} style={`--c:${c.color}`}>{c.short}</button>)}
+    </div>
+    <div class="grid-3" id="archive">{all.map((p) => <div data-cat={p.data.category}><PostCard post={p} /></div>)}</div>
+  </section>
+  <script is:inline>
+    document.querySelectorAll('.filters button').forEach((b) => b.addEventListener('click', () => {
+      document.querySelectorAll('.filters button').forEach((x) => x.classList.toggle('on', x === b));
+      document.querySelectorAll('#archive > div').forEach((el) => { el.hidden = b.dataset.f !== 'all' && el.dataset.cat !== b.dataset.f; });
+    }));
+  </script>
+</Base>

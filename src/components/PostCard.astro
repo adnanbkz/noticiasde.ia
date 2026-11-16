@@ -1,0 +1,20 @@
+---
+import Cover from './Cover.astro';
+import { CATEGORIES } from '../data/site';
+import type { CollectionEntry } from 'astro:content';
+interface Props { post: CollectionEntry<'articulos'>; variant?: 'big' | 'card' | 'row' | 'overlay'; mascot?: boolean }
+const { post, variant = 'card', mascot = false } = Astro.props;
+const d = post.data;
+const cat = CATEGORIES[d.category];
+const mins = Math.max(2, Math.round((post.body ?? '').split(/\s+/).length / 200));
+const date = d.date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+const href = `/articulos/${post.id}/`;
+---
+<article class={`pc pc-${variant}`} style={`--c:${cat.color}`}>
+  <a href={href} class="pc-media" tabindex="-1" aria-hidden="true"><Cover slug={post.id} category={d.category} cover={d.cover} mascot={mascot} /></a>
+  <div class="pc-body">
+    <h3 class="pc-title"><a href={href}>{d.title}</a></h3>
+    {variant !== 'row' && <p class="pc-desc">{d.description}</p>}
+    <p class="meta"><a class="cat" href={`/categoria/${d.category}/`}><span class="dot"></span>{cat.name}</a><span>{date}</span><span>{mins} min</span></p>
+  </div>
+</article>

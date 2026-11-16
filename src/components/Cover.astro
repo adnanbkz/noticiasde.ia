@@ -1,0 +1,90 @@
+---
+// Portada automática dibujada en SVG según la categoría.
+// Si el artículo trae `cover`, se usa la imagen en su lugar.
+import { CATEGORIES, type CatId } from '../data/site';
+interface Props { slug: string; category: CatId; cover?: string; alt?: string; mascot?: boolean; class?: string }
+const { slug, category, cover, alt = '', mascot = false, class: cls = '' } = Astro.props;
+const c = CATEGORIES[category];
+let seed = [...slug].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) >>> 0, 7);
+const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+const id = `g${slug.replace(/[^a-z0-9]/gi, '')}`;
+const r = Array.from({ length: 40 }, rnd);
+const W = 1200, H = 675;
+const nodes = Array.from({ length: 9 }, (_, i) => ({ x: 120 + r[i] * 960, y: 90 + r[i + 9] * 495 }));
+---
+<div class={`cover ${cls}`}>
+  {cover ? <img src={cover} alt={alt} loading="lazy" /> : (
+  <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" role="img" aria-label={alt || c.name}>
+    <defs>
+      <linearGradient id={`${id}bg`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color={c.color2} />
+        <stop offset="1" stop-color="#120c22" />
+      </linearGradient>
+      <radialGradient id={`${id}glow`} cx={0.3 + r[30] * 0.4} cy={0.35 + r[31] * 0.3} r="0.6">
+        <stop offset="0" stop-color={c.color} stop-opacity="0.75" />
+        <stop offset="1" stop-color={c.color} stop-opacity="0" />
+      </radialGradient>
+      <pattern id={`${id}grid`} width="48" height="48" patternUnits="userSpaceOnUse">
+        <path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity="0.07" stroke-width="1" />
+      </pattern>
+      <filter id={`${id}grain`}><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" /><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.09 0" /></filter>
+    </defs>
+    <rect width={W} height={H} fill={`url(#${id}bg)`} />
+    <rect width={W} height={H} fill={`url(#${id}glow)`} />
+    <rect width={W} height={H} fill={`url(#${id}grid)`} />
+    <g fill="none" stroke={c.color} stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      {category === 'agentes' && (<>
+        {nodes.map((n, i) => nodes.slice(i + 1, i + 3).map((m) => <line x1={n.x} y1={n.y} x2={m.x} y2={m.y} stroke-opacity="0.55" />))}
+        {nodes.map((n, i) => <circle cx={n.x} cy={n.y} r={i === 0 ? 46 : 14 + r[i] * 16} fill={i === 0 ? c.color : '#120c22'} />)}
+      </>)}
+      {category === 'modelos' && (<>
+        {[0, 1, 2, 3].map((col) => { const n = col % 3 === 0 ? 4 : 6; return Array.from({ length: n }, (_, j) => {
+          const x = 260 + col * 230, y = H / 2 + (j - (n - 1) / 2) * 92;
+          return <circle cx={x} cy={y} r="22" fill={j === Math.floor(r[col] * n) ? c.color : 'none'} />;
+        }); })}
+        {[0, 1, 2].map((col) => Array.from({ length: 12 }, (_, k) => {
+          const a = col % 3 === 0 ? 4 : 6, b = (col + 1) % 3 === 0 ? 4 : 6;
+          const j = k % a, l = Math.floor(r[(k + col * 5) % 40] * b);
+          return <line x1={282 + col * 230} y1={H / 2 + (j - (a - 1) / 2) * 92} x2={468 + col * 230} y2={H / 2 + (l - (b - 1) / 2) * 92} stroke-opacity="0.35" />;
+        }))}
+      </>)}
+      {category === 'cloud' && (<>
+        <path d="M330 330c-70 0-110-50-100-100 10-60 70-90 120-70 20-70 100-110 170-80 50 20 75 60 78 100 60-10 110 30 110 85s-45 65-90 65z" stroke-width="5" transform={`translate(${r[0] * 260} ${r[1] * 40})`} />
+        {[0, 1, 2].map((i) => <rect x={760 + r[2] * 80} y={300 + i * 92} width="300" height="70" rx="12" fill={i === 1 ? c.color : 'none'} fill-opacity="0.18" />)}
+        {[0, 1, 2].map((i) => <circle cx={800 + r[2] * 80} cy={335 + i * 92} r="8" fill={c.color} />)}
+      </>)}
+      {category === 'dev' && (<>
+        <rect x="190" y="130" width="820" height="420" rx="22" fill="#0d0918" fill-opacity="0.6" />
+        <line x1="190" y1="190" x2="1010" y2="190" stroke-opacity="0.4" />
+        {[0, 1, 2].map((i) => <circle cx={230 + i * 32} cy="160" r="8" fill={c.color} fill-opacity={1 - i * 0.3} />)}
+        {Array.from({ length: 6 }, (_, i) => <line x1={250 + (i % 3) * 40} y1={240 + i * 48} x2={330 + r[i] * 520} y2={240 + i * 48} stroke-width="14" stroke-opacity={0.35 + r[i + 6] * 0.6} />)}
+        <path d="M860 300l60 70-60 70" stroke-width="10" />
+      </>)}
+      {category === 'seguridad' && (<>
+        <path d={`M${600} 110l210 80v150c0 130-110 200-210 235-100-35-210-105-210-235V190z`} stroke-width="6" fill={c.color} fill-opacity="0.12" />
+        <rect x="540" y="330" width="120" height="100" rx="14" fill={c.color} />
+        <path d="M565 330v-35a35 35 0 0 1 70 0v35" stroke-width="10" />
+        {Array.from({ length: 14 }, (_, i) => <text x={60 + r[i] * 1080} y={60 + r[i + 14] * 560} fill={c.color} fill-opacity="0.35" stroke="none" font-family="monospace" font-size="26">{r[i] > 0.5 ? '1' : '0'}</text>)}
+      </>)}
+      {category === 'explicado' && (<>
+        {[0, 1, 2].map((i) => { const cx = 380 + i * 230 + r[i] * 40, cy = 330 + (i % 2 ? -60 : 60), R = 70 + i * 18; return (
+          <g transform={`rotate(${r[i + 3] * 60} ${cx} ${cy})`}>
+            <circle cx={cx} cy={cy} r={R} stroke-width="22" stroke-dasharray="22 16" />
+            <circle cx={cx} cy={cy} r={R * 0.4} fill={i === 1 ? c.color : 'none'} />
+          </g>); })}
+      </>)}
+      {category === 'opinion' && (<>
+        <path d="M250 170h460a40 40 0 0 1 40 40v170a40 40 0 0 1-40 40H420l-90 70v-70h-80a40 40 0 0 1-40-40V210a40 40 0 0 1 40-40z" stroke-width="6" fill={c.color} fill-opacity="0.15" />
+        <path d="M640 330h300a36 36 0 0 1 36 36v120a36 36 0 0 1-36 36h-50v60l-70-60H640a36 36 0 0 1-36-36V366a36 36 0 0 1 36-36z" stroke-width="6" />
+        {[0, 1, 2].map((i) => <line x1="290" y1={240 + i * 50} x2={480 + r[i] * 220} y2={240 + i * 50} stroke-width="14" stroke-opacity="0.6" />)}
+      </>)}
+      {category === 'camino' && (<>
+        {Array.from({ length: 6 }, (_, i) => <rect x={180 + i * 140} y={520 - i * 62} width="140" height={62 + i * 62} fill={c.color} fill-opacity={0.08 + i * 0.07} />)}
+        <path d={`M1020 150v-70l70 26-70 26`} fill={c.color} stroke-width="5" />
+        <path d="M200 500C420 470 600 300 1020 160" stroke-dasharray="4 16" stroke-width="6" />
+      </>)}
+    </g>
+    <rect width={W} height={H} filter={`url(#${id}grain)`} />
+  </svg>)}
+  {mascot && !cover && <img class="cover-mascot" src="/img/mascota.webp" alt="" loading="lazy" />}
+</div>

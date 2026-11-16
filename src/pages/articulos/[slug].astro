@@ -1,0 +1,59 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cover from '../../components/Cover.astro';
+import PostCard from '../../components/PostCard.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import { getCollection, render } from 'astro:content';
+import { CATEGORIES, AUTHOR, SOCIALS } from '../../data/site';
+export async function getStaticPaths() {
+  const posts = await getCollection('articulos', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+const { post, posts } = Astro.props;
+const { Content, headings } = await render(post);
+const d = post.data; const cat = CATEGORIES[d.category];
+const mins = Math.max(2, Math.round((post.body ?? '').split(/\s+/).length / 200));
+const date = d.date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+const related = posts.filter((p) => p.id !== post.id).sort((a, b) => (b.data.category === d.category ? 1 : 0) - (a.data.category === d.category ? 1 : 0) || +b.data.date - +a.data.date).slice(0, 3);
+const toc = headings.filter((h) => h.depth === 2);
+---
+<Base title={d.title} description={d.description}>
+  <article class="post" style={`--c:${cat.color}`}>
+    <header class="wrap post-head">
+      <p class="crumbs"><a href="/articulos/">Artículos</a><span aria-hidden="true">/</span><a href={`/categoria/${d.category}/`}><span class="dot"></span>{cat.name}</a></p>
+      <h1>{d.title}</h1>
+      <p class="post-dek">{d.description}</p>
+      <div class="byline">
+        <img src={AUTHOR.photo ?? '/img/mascota-cara.png'} alt="" width="44" height="44" />
+        <div><strong>{AUTHOR.name}</strong><span class="muted"> · {date} · {mins} min de lectura</span></div>
+        <span class="stamp">escrito a mano<small>sin IA</small></span>
+      </div>
+    </header>
+    <div class="wrap post-cover"><Cover slug={post.id} category={d.category} cover={d.cover} alt={d.title} mascot /></div>
+    <div class="wrap post-grid">
+      <aside class="post-aside">
+        {toc.length > 0 && (<nav class="toc"><p class="aside-title">En este artículo</p><ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol></nav>)}
+        <div class="share"><p class="aside-title">Compartir</p>
+          <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(d.title)}`} target="_blank" rel="noopener">X</a>
+          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=`} target="_blank" rel="noopener">LinkedIn</a>
+          <a href={`https://wa.me/?text=${encodeURIComponent(d.title)}`} target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </aside>
+      <div class="prose"><Content /></div>
+      <aside class="post-reel">
+        <Placeholder img={null} label="El reel de este artículo" hint="Captura del reel" href={d.reel ?? SOCIALS[0].url} />
+      </aside>
+    </div>
+    <div class="wrap post-foot">
+      {d.tags.length > 0 && <p class="tags">{d.tags.map((t) => <span>#{t}</span>)}</p>}
+      <div class="handnote">
+        <p class="hand big-hand">Escrito a mano por {AUTHOR.name}</p>
+        <p class="muted">Sin ChatGPT, sin Claude, sin "mejórame este texto". Si ves un error, es mío y me lo puedes decir en <a href={SOCIALS[0].url} target="_blank" rel="noopener">Instagram</a>.</p>
+      </div>
+    </div>
+  </article>
+  <section class="wrap more-posts">
+    <h2 class="section-title">Sigue leyendo</h2>
+    <div class="grid-3">{related.map((p) => <PostCard post={p} />)}</div>
+  </section>
+</Base>
