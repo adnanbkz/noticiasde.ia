@@ -1,17 +1,19 @@
 {
-  "name": "web",
+  "name": "noticiasde-ia",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Web personal y blog de IA de noticiasde.ia",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.4.7"
-  }
+  },
+  "private": true
 }
