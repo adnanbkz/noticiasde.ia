@@ -31,11 +31,33 @@ npx bla-agents harden .
 
 [github.com/anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review)
 
-Una GitHub Action que usa Claude para revisar cada pull request en busca de fallos de seguridad y deja los comentarios en la propia PR. Se añade al workflow con una línea:
+Una GitHub Action que usa Claude para revisar cada pull request en busca de fallos de seguridad y deja los comentarios en la propia PR. Este es el workflow mínimo de su README (`.github/workflows/security.yml`), con tu clave de la API guardada como secreto `CLAUDE_API_KEY`:
 
 ```yaml
-- uses: anthropics/claude-code-security-review@main
+name: Security Review
+
+permissions:
+  pull-requests: write
+  contents: read
+
+on:
+  pull_request:
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+      - uses: anthropics/claude-code-security-review@main
+        with:
+          comment-pr: true
+          claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
 ```
+
+Dos avisos: en producción, cambia `@main` por el hash de un commit concreto que hayas revisado, para que un cambio futuro en la acción no se ejecute solo en tu repo. Y el propio README avisa de que no está blindada contra inyecciones de prompt, así que úsala con PRs de gente de confianza.
 
 ## 9. ClamAV (Cisco) · 7,6k estrellas
 
