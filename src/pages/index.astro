@@ -4,10 +4,11 @@ import PostCard from '../components/PostCard.astro';
 import Placeholder from '../components/Placeholder.astro';
 import Newsletter from '../components/Newsletter.astro';
 import { getCollection } from 'astro:content';
-import { AUTHOR, WORK, PROJECTS, STORY, SOCIALS, REELS, REPOS_FALLBACK } from '../data/site';
+import { AUTHOR, WORK, PROJECTS, STORY, SOCIALS, REPOS_FALLBACK } from '../data/site';
 const posts = (await getCollection('articulos', ({ data }) => !data.draft)).sort((a, b) => +b.data.date - +a.data.date);
 const [lead, ...rest] = posts;
-const langColor: Record<string, string> = { TypeScript: '#3178c6', JavaScript: '#f1e05a', Python: '#3572A5', Astro: '#ff5a03', HCL: '#844FBA', Go: '#00ADD8', Rust: '#dea584', 'C++': '#f34b7d', Shell: '#89e051' };
+const tiktok = SOCIALS.find((x) => x.id === 'tiktok')!;
+const langColor: Record<string, string> = { TypeScript: '#3178c6', JavaScript: '#f1e05a', Python: '#3572A5', Astro: '#ff5a03', HCL: '#844FBA', Go: '#00ADD8', Rust: '#dea584', 'C++': '#f34b7d', Shell: '#89e051', Java: '#b07219', Kotlin: '#A97BFF', 'C#': '#178600', HTML: '#e34c26', CSS: '#663399' };
 ---
 <Base title="Adnan" description={AUTHOR.bio}>
   <!-- Hero: el foco eres tú -->
@@ -43,7 +44,7 @@ const langColor: Record<string, string> = { TypeScript: '#3178c6', JavaScript: '
 
   <!-- Lo que hago -->
   <section class="work wrap" id="trabajo">
-    <div class="work-photo"><Placeholder img={WORK.photo} label="" ratio="4/3" hint="Foto tuya con un cobot" /></div>
+    <div class="work-photo"><Placeholder img={WORK.photo} label="" ratio="3/4" hint="Foto tuya con un cobot" /></div>
     <div class="work-text">
       <h2>{WORK.title}</h2>
       <p class="lead">{WORK.intro}</p>
@@ -76,12 +77,12 @@ const langColor: Record<string, string> = { TypeScript: '#3178c6', JavaScript: '
     <h2 class="section-title">Proyectos</h2>
     {PROJECTS.map((p, i) => (
       <article class={`project ${i % 2 ? 'project-rev' : ''}`}>
-        <Placeholder img={p.img} label="" ratio="16/10" hint="Captura del proyecto" />
+        <Placeholder img={p.img} label="" ratio="16/10" hint={i === 0 ? "Captura de tus interfaces de soldadura" : "Captura del proyecto"} />
         <div class="project-text">
           <h3>{p.name}</h3>
           <p>{p.what}</p>
           <ul class="chips">{p.stack.map((t) => <li>{t}</li>)}</ul>
-          <a class="arrow-link" href={p.url} target={p.url.startsWith('http') ? '_blank' : undefined} rel="noopener">{p.cta}</a>
+          {p.url && <a class="arrow-link" href={p.url} target="_blank" rel="noopener">{p.cta}</a>}
         </div>
       </article>
     ))}
@@ -94,9 +95,16 @@ const langColor: Record<string, string> = { TypeScript: '#3178c6', JavaScript: '
         <h2 class="section-title">En GitHub</h2>
         <a class="arrow-link" href={`https://github.com/${AUTHOR.github}`} target="_blank" rel="noopener">github.com/{AUTHOR.github}</a>
       </div>
-      <div class="gh-chart">
-        <img src={`https://ghchart.rshah.org/7b5cff/${AUTHOR.github}`} alt="Gráfico de contribuciones en GitHub" loading="lazy" onerror="this.parentElement.classList.add('gh-chart-off')" />
-        <p class="gh-chart-fallback">Aquí aparece tu gráfico de contribuciones de GitHub en la web publicada.</p>
+      <ul class="gh-stats" id="gh-stats" aria-live="polite">
+        <li><b data-k="repos">–</b>repos públicos</li>
+        <li><b data-k="stars">–</b>estrellas</li>
+        <li><b data-k="followers">–</b>seguidores</li>
+        <li><b data-k="last">–</b>última actividad</li>
+      </ul>
+      <div class="gh-cal" id="gh-cal" data-user={AUTHOR.github}>
+        <p class="gh-cal-title"><b data-k="contribs">–</b> contribuciones en el último año</p>
+        <div class="gh-cal-scroll"><div class="gh-cal-grid" role="img" aria-label="Calendario de contribuciones en GitHub"></div></div>
+        <p class="gh-cal-legend">Menos <i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i> Más</p>
       </div>
       <div class="repos" id="repos" data-user={AUTHOR.github}>
         {REPOS_FALLBACK.map((r) => (
@@ -110,13 +118,41 @@ const langColor: Record<string, string> = { TypeScript: '#3178c6', JavaScript: '
       </div>
     </div>
   </section>
+  <script is:inline>
+    (async () => {
+      const cal = document.getElementById('gh-cal'); if (!cal) return;
+      try {
+        const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${cal.dataset.user}?y=last`);
+        if (!res.ok) throw 0;
+        const data = await res.json();
+        const days = data.contributions || [];
+        cal.querySelector('[data-k="contribs"]').textContent = data.total?.lastYear ?? days.reduce((n, d) => n + d.count, 0);
+        const grid = cal.querySelector('.gh-cal-grid');
+        const pad = days.length ? new Date(days[0].date + 'T12:00:00').getDay() : 0;
+        const frag = document.createDocumentFragment();
+        for (let i = 0; i < pad; i++) frag.append(document.createElement('span'));
+        days.forEach((d) => { const c = document.createElement('i'); c.className = 'l' + d.level; c.title = `${d.count} el ${d.date}`; frag.append(c); });
+        grid.append(frag);
+        cal.classList.add('is-ready');
+      } catch (e) { cal.classList.add('is-off'); }
+    })();
+  </script>
   <script is:inline define:vars={{ langColor }}>
     (async () => {
       const box = document.getElementById('repos'); if (!box) return;
       try {
-        const res = await fetch(`https://api.github.com/users/${box.dataset.user}/repos?sort=updated&per_page=12`);
-        if (!res.ok) return;
-        const repos = (await res.json()).filter((r) => !r.fork).sort((a, b) => b.stargazers_count - a.stargazers_count || new Date(b.pushed_at) - new Date(a.pushed_at)).slice(0, 6);
+        const user = box.dataset.user;
+        const [ru, rr] = await Promise.all([fetch(`https://api.github.com/users/${user}`), fetch(`https://api.github.com/users/${user}/repos?sort=pushed&per_page=100`)]);
+        if (!rr.ok) return;
+        const all = (await rr.json()).filter((r) => !r.fork);
+        const set = (k, v) => { const el = document.querySelector(`#gh-stats [data-k="${k}"]`); if (el) el.textContent = v; };
+        if (ru.ok) { const u = await ru.json(); set('repos', u.public_repos); set('followers', u.followers); }
+        set('stars', all.reduce((n, r) => n + r.stargazers_count, 0));
+        if (all[0]) {
+          const days = Math.round((Date.now() - new Date(all[0].pushed_at)) / 864e5);
+          set('last', days <= 0 ? 'hoy' : days === 1 ? 'ayer' : `hace ${days} días`);
+        }
+        const repos = [...all].slice(0, 6); // los 6 con actividad más reciente
         if (!repos.length) return;
         const tpl = box.querySelector('.repo');
         box.replaceChildren(...repos.map((r) => {
@@ -145,18 +181,28 @@ const langColor: Record<string, string> = { TypeScript: '#3178c6', JavaScript: '
       <PostCard post={lead} variant="big" mascot />
       <div class="latest-list">{rest.slice(0, 4).map((p) => <PostCard post={p} variant="row" />)}</div>
     </div>
-    <p class="handwritten-note"><span class="hand">todo escrito a mano</span> Ni una frase de estos artículos la ha escrito una IA. <a href="/escrito-a-mano/">Por qué</a></p>
   </section>
 
   <!-- Redes -->
   <section class="social" id="redes">
     <div class="wrap">
-      <div class="gh-head">
-        <h2 class="section-title">Donde me puedes ver</h2>
-        <ul class="social-links">{SOCIALS.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.name}<span>{s.handle}</span></a></li>)}</ul>
-      </div>
-      <div class="reel-row">
-        {REELS.map((r) => <Placeholder img={r.img} label={r.title} href={r.url} hint="Captura del reel" />)}
+      <h2 class="section-title">Donde me puedes ver</h2>
+      <ul class="social-links">{SOCIALS.map((s) => (
+        <li><a class={`net net-${s.id}`} href={s.url} target="_blank" rel="noopener"><span class="net-dot"></span><strong>{s.name}</strong><span>{s.handle}</span></a></li>
+      ))}</ul>
+      <div class="tiktok-box">
+        <div class="tiktok-cta">
+          <img src="/img/mascota-cara.png" alt="" width="72" height="72" />
+          <h3>Mis últimos TikToks</h3>
+          <p>Vídeos de un minuto explicando IA y tecnología en español. Se actualizan solos cada vez que subo uno nuevo.</p>
+          <a class="btn" href={tiktok.url} target="_blank" rel="noopener">Abrir {tiktok.handle}</a>
+        </div>
+        <div class="tiktok-embed-wrap">
+          <blockquote class="tiktok-embed" cite={tiktok.url} data-unique-id={tiktok.handle.replace('@', '')} data-embed-type="creator" style="max-width: 780px; min-width: 288px;">
+            <section><a target="_blank" rel="noopener" href={`${tiktok.url}?refer=creator_embed`}>{tiktok.handle} en TikTok</a></section>
+          </blockquote>
+          <script is:inline async src="https://www.tiktok.com/embed.js"></script>
+        </div>
       </div>
     </div>
   </section>
