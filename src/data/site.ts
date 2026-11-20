@@ -74,7 +74,7 @@ export const PROJECTS = [
     name: 'Cobots de soldadura',
     what: 'He implementado tecnologías punteras en el mundo de los cobots y la soldadura, como MultiLayer, Touch Sensing y Matrix Replica, diseñando las interfaces y el contenido que hay dentro.',
     stack: ['Universal Robots', 'Java', 'Maven', 'URScript', 'PLC'],
-    img: null as string | null, // pon aquí una captura de tus interfaces: '/proyectos/cobots.webp' url: '', cta: '',
+    img: '/proyectos/cobots.webp' as string | null, url: '', cta: '',
   },
   {
     name: 'FinallyLoseWeight',
