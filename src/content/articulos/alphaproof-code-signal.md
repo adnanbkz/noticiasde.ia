@@ -29,7 +29,7 @@ El reparto de trabajo es lo que más me ha llamado la atención:
 2. **Los agentes escriben la demostración.** Varios agentes con Gemini trabajan en paralelo construyendo la prueba paso a paso.
 3. **Lean comprueba que la prueba es correcta.** Lean es un lenguaje y un asistente de demostraciones: si la prueba tiene un hueco, no compila. Aquí está la clave de todo. No hace falta fiarse de la IA, porque la que valida el resultado es una máquina que solo acepta matemáticas correctas.
 
-Según DeepMind, solo alrededor del 1 % del trabajo necesitó revisión humana. Y hay otro detalle importante: la verificación se hizo sobre el **código compilado**, el que de verdad corre en los dispositivos, no sobre una versión idealizada en papel. Muchos fallos reales viven justo en ese salto entre el diseño y lo que acaba ejecutándose.
+Expertos humanos revisaron todas las especificaciones, y después los agentes auditaron sus propias pruebas y marcaron alrededor del 1 % del código para que una persona le echara un segundo vistazo. Y hay otro detalle importante: la verificación se hizo sobre **código máquina compilado** (un programa de prueba para Linux en ARM construido a partir de la librería real de Signal), no sobre una versión idealizada en papel. No es exactamente el binario de Android o iOS, que se compila con otras opciones, pero se acerca mucho más que cualquier verificación sobre el diseño. Muchos fallos reales viven justo en ese salto entre el diseño y lo que acaba ejecutándose.
 
 ## La prueba de fuego: dos bugs reales
 
@@ -39,7 +39,7 @@ Esto es lo que diferencia una herramienta útil de una demo bonita. Si un verifi
 
 ## Qué se ha demostrado exactamente
 
-Entre las propiedades verificadas está una de las promesas más importantes de Signal: aunque alguien comprometa tu móvil durante un tiempo, **los mensajes de antes y los de después siguen protegidos**. Es lo que se conoce como secreto hacia delante y recuperación tras un compromiso, y es la base de por qué Signal se considera tan seguro.
+Entre las propiedades verificadas está una de las promesas más importantes de Signal: aunque alguien comprometa tu móvil durante un tiempo, **los mensajes de antes siguen protegidos, y los de después vuelven a estarlo** en cuanto las claves se renuevan con un nuevo intercambio que el atacante no controla. Es lo que se conoce como secreto hacia delante y recuperación tras un compromiso, y es la base de por qué Signal se considera tan seguro.
 
 ## Lo que no cubre
 
