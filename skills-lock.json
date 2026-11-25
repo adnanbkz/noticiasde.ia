@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "skills": {
+    "magic-ui": {
+      "source": "magicuidesign/magicui",
+      "commit": "d13c6101da1165f7309c6281447c25f121ef0ca9",
+      "sourceType": "github",
+      "skillPath": "skills/magic-ui/SKILL.md",
+      "computedHash": "e3900c4a7e3a9cec2ca07931099aaa5b979f8454ace6dc166cb91e9fd3f4ce54"
+    },
+    "react-bits": {
+      "source": "kmshihab7878/claude-code-setup",
+      "commit": "d449c0ecd6e61959b22ce023dc57c52913117009",
+      "sourceType": "github",
+      "skillPath": "skills/react-bits/SKILL.md",
+      "computedHash": "ee6869932dd6465bb863c16ffb2992a5aa4aa5c23bb993847ba294bd79c9480c"
+    }
+  }
+}
