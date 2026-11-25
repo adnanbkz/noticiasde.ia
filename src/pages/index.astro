@@ -114,8 +114,9 @@ const short = (t: string) => (t.length > 58 ? t.slice(0, 56).replace(/[\s,:;]+\S
       <h2><span>¿Te gusta la IA</span><em>contada sin humo?</em></h2>
       <ul class="ct-links">
         <li><a href={net('tiktok').url} target="_blank" rel="noopener">Sígueme en TikTok</a></li>
-        <li class="ct-stack">
-          <a href={net('instagram').url} target="_blank" rel="noopener">Escríbeme por Instagram</a>
+        <li><a href={net('instagram').url} target="_blank" rel="noopener">Escríbeme por Instagram</a></li>
+        <li><a href={net('kofi').url} target="_blank" rel="noopener">Invítame a un café</a></li>
+        <li class="ct-mail-li">
           <details class="ct-mail">
             <summary>{EMAIL}</summary>
             <div class="ct-mail-menu">
@@ -125,7 +126,6 @@ const short = (t: string) => (t.length > 58 ? t.slice(0, 56).replace(/[\s,:;]+\S
             </div>
           </details>
         </li>
-        <li><a href={net('kofi').url} target="_blank" rel="noopener">Invítame a un café</a></li>
       </ul>
     </div>
   </section>

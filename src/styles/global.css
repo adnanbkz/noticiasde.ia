@@ -366,12 +366,12 @@ main.has-pill { padding-top: 86px; }
 .ct-card h2 { display: grid; }
 .ct-card h2 span { font: 800 clamp(2.4rem, 5vw, 4rem)/.95 var(--f-display); letter-spacing: -0.05em; }
 .ct-card h2 em { font: 400 clamp(2.3rem, 4.8vw, 3.9rem)/1 var(--f-serif); font-style: normal; color: var(--muted); letter-spacing: -0.03em; }
-.ct-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 1rem 3rem; }
+.ct-links { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, max-content); gap: 1.2rem 3.5rem; align-items: start; }
+@media (max-width: 560px) { .ct-links { grid-template-columns: 1fr; } .ct-mail-li { order: 2; } .ct-links > li:nth-child(3) { order: 3; } }
 .ct-links > li > a, .ct-mail summary { position: relative; display: inline-block; padding-bottom: .35rem; font: 700 clamp(1.05rem, 1.5vw, 1.25rem) var(--f-display); letter-spacing: -0.02em; }
 .ct-links > li > a::before, .ct-links > li > a::after, .ct-mail summary::before, .ct-mail summary::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; border-radius: 2px; background: #ebe6f6; }
 .ct-links > li > a::after, .ct-mail summary::after { background: var(--violet); scale: 0 1; transform-origin: right; transition: scale .45s var(--ease); }
 .ct-links > li > a:hover::after, .ct-mail summary:hover::after, .ct-mail[open] summary::after { scale: 1 1; transform-origin: left; }
-.ct-stack { display: grid; gap: .7rem; justify-items: start; }
 .ct-mail { position: relative; }
 .ct-mail summary { list-style: none; cursor: pointer; color: var(--violet); }
 .ct-mail summary::-webkit-details-marker { display: none; }
@@ -435,23 +435,14 @@ main.has-pill { padding-top: 86px; }
 .ft-nets a { display: inline-flex; align-items: center; gap: 1.4rem; padding: 7px 7px 7px 16px; border-radius: 9px; background: #fff; font: 800 .82rem var(--f-display); text-transform: uppercase; letter-spacing: .03em; box-shadow: 0 1px 0 rgb(27 21 48 / .04); }
 .ft-arrow { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 6px; background: var(--paper); transition: background .2s, color .2s, rotate .4s var(--ease); }
 .ft-nets a:hover .ft-arrow { background: var(--violet); color: #fff; rotate: 45deg; }
-.ft-mid { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; margin-top: clamp(3rem, 7vw, 5rem); }
-.ft-card { display: grid; width: min(340px, 100%); padding: 8px 8px 14px; border-radius: 14px; background: #fff; transition: translate .4s var(--ease); }
-.ft-card:hover { translate: 0 -4px; }
-.ft-card-media { position: relative; aspect-ratio: 16/9; border-radius: 9px; overflow: hidden; margin-bottom: .8rem; }
-.ft-card-media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
-.ft-card-tag { position: absolute; top: 8px; left: 8px; padding: 4px 7px; border-radius: 5px; background: rgb(255 255 255 / .35); backdrop-filter: blur(6px); color: #fff; font: 700 .68rem var(--f-display); }
-.ft-card strong { font: 700 .95rem var(--f-display); padding-inline: .5rem; }
-.ft-card > span:last-child { font-size: .85rem; color: var(--ink-2); padding-inline: .5rem; }
-.ft-stats { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.ft-stats li { display: grid; min-width: 150px; padding: 1.1rem 1.3rem; border-radius: 12px; background: #fff; }
+.ft-stats { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; max-width: 520px; }
+.ft-stats li { display: grid; align-content: start; padding: 1rem 1.1rem; border-radius: 12px; background: #fff; }
 .ft-stats b { font: 800 1.7rem/1 var(--f-display); letter-spacing: -0.03em; }
 .ft-stats span { font-size: .8rem; color: var(--ink-2); margin-top: .3rem; }
-.ft-legal { display: flex; flex-wrap: wrap; gap: .6rem 2rem; margin-top: 2.5rem; font-size: .85rem; color: var(--ink-2); }
+.ft-legal { display: flex; flex-wrap: wrap; gap: .6rem 2rem; margin-top: 3rem; padding-top: 1.4rem; border-top: 1px solid var(--line); font-size: .85rem; color: var(--ink-2); }
 .ft-legal a:hover { color: var(--violet); }
 @media (max-width: 900px) {
   .ft-top { grid-template-columns: 1fr; }
   .ft-nets { display: flex; flex-wrap: wrap; }
   .ft-links ul { gap: .7rem 2.5rem; }
-  .ft-stats li { min-width: 0; flex: 1 1 120px; }
 }

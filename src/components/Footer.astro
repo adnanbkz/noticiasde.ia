@@ -1,5 +1,5 @@
 ---
-import { SITE, SOCIALS, AUTHOR, STATS, WORK } from '../data/site';
+import { SITE, SOCIALS, AUTHOR, STATS } from '../data/site';
 const links = [
   { href: '/articulos/', label: 'Artículos' },
   { href: '/#hago', label: 'Lo que hago' },
@@ -14,6 +14,7 @@ const links = [
       <div class="ft-brand">
         <a class="ft-logo" href="/">noticiasde<em>.ia</em></a>
         <p>{SITE.tagline}</p>
+        <ul class="ft-stats">{STATS.map((s) => <li><b>{s.value}</b><span>{s.label}</span></li>)}</ul>
       </div>
       <nav class="ft-links" aria-label="Pie de página">
         <p class="ft-eyebrow">Links</p>
@@ -22,18 +23,6 @@ const links = [
       <ul class="ft-nets">{SOCIALS.map((s) => (
         <li><a href={s.url} target="_blank" rel="noopener">{s.name}<span class="ft-arrow" aria-hidden="true"><svg viewBox="0 0 12 12" width="11" height="11"><path d="M3 9 9 3M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span></a></li>
       ))}</ul>
-    </div>
-
-    <div class="ft-mid">
-      <a class="ft-card" href="/#trayectoria">
-        <span class="ft-card-media">
-          <img src={WORK.photo ?? AUTHOR.photo ?? ''} alt="Adnan programando un cobot" loading="lazy" width="768" height="1024" />
-          <span class="ft-card-tag">De 9 a 6</span>
-        </span>
-        <strong>De día programo cobots</strong>
-        <span>De noche, reels de IA</span>
-      </a>
-      <ul class="ft-stats">{STATS.map((s) => <li><b>{s.value}</b><span>{s.label}</span></li>)}</ul>
     </div>
 
     <div class="ft-legal">
