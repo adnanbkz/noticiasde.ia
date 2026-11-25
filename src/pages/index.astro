@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Cover from '../components/Cover.astro';
 import { getCollection } from 'astro:content';
-import { AUTHOR, WORK, PROJECTS, STORY, SOCIALS, REELS, CATEGORIES } from '../data/site';
+import { AUTHOR, WORK, PROJECTS, STORY, SOCIALS, REELS, CATEGORIES, EMAIL } from '../data/site';
 
 const posts = (await getCollection('articulos', ({ data }) => !data.draft)).sort((a, b) => +b.data.date - +a.data.date);
 const latest = posts[0];
@@ -15,7 +15,6 @@ const spots = [
   { x: 21, y: 6,  w: 112, d: .45, r: -5, mx: 0,  my: 0,  mw: 0 },
   { x: 87, y: 56, w: 128, d: .75, r: -3, mx: 74, my: 71, mw: 78 },
   { x: 25, y: 71, w: 108, d: .55, r: 6,  mx: 0,  my: 0,  mw: 0 },
-  { x: 67, y: 12, w: 96,  d: .3,  r: -7, mx: 0,  my: 0,  mw: 0 },
 ];
 type Mix = { kind: 'project' | 'post'; title: string; tags: string[]; href: string; ext: boolean; img?: string | null; post?: (typeof posts)[number] };
 const projects: Mix[] = PROJECTS.map((p) => ({ kind: 'project', title: p.name, tags: p.stack.slice(0, 2), href: p.url || '#trayectoria', ext: !!p.url, img: p.img }));
@@ -40,7 +39,7 @@ const short = (t: string) => (t.length > 58 ? t.slice(0, 56).replace(/[\s,:;]+\S
       {REELS.map((r, i) => { const s = spots[i]; return (
         <a class={`fl fl-reel ${i === 0 ? 'is-top' : ''}`} href={r.url} target="_blank" rel="noopener"
           style={`--x:${s.x}%;--y:${s.y}%;--w:${s.w};--d:${s.d};--r:${s.r}deg;--mx:${s.mx}%;--my:${s.my}%;--mw:${s.mw};--i:${i}`}
-          data-d={s.d} data-hidem={s.mw === 0 ? '' : undefined} aria-label={`Ver en TikTok: ${r.title} (${r.views} visualizaciones)`}>
+          data-d={s.d} data-hidem={s.mw === 0 ? '' : undefined} aria-label={`Ver en Instagram: ${r.title} (${r.views} visualizaciones)`}>
           <span class="fl-in">
             <img src={r.img} alt="" width="360" height="640" loading="eager" />
             <span class="fl-views"><svg viewBox="0 0 10 10" width="9" height="9" aria-hidden="true"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg>{r.views}</span>
@@ -62,8 +61,8 @@ const short = (t: string) => (t.length > 58 ? t.slice(0, 56).replace(/[\s,:;]+\S
 
       <a class="fl fl-me" href="#trayectoria" style="--x:6%;--y:53%;--w:186;--d:.9;--r:-4deg;--mx:5%;--my:68%;--mw:112;--i:6" data-d=".9" aria-label="Abrir mi trayectoria">
         <span class="fl-in">
-          <img src={AUTHOR.photo ?? '/img/mascota-cara.png'} alt="Adnan" width="614" height="768" />
-          <span class="fl-me-tag">Mi trayectoria <svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          <span class="fl-bubble fl-bubble-me">Mi historia</span>
+          <span class="fl-photo"><img src={AUTHOR.photo ?? '/img/mascota-cara.png'} alt="Adnan" width="614" height="768" /></span>
         </span>
       </a>
 
@@ -115,7 +114,17 @@ const short = (t: string) => (t.length > 58 ? t.slice(0, 56).replace(/[\s,:;]+\S
       <h2><span>¿Te gusta la IA</span><em>contada sin humo?</em></h2>
       <ul class="ct-links">
         <li><a href={net('tiktok').url} target="_blank" rel="noopener">Sígueme en TikTok</a></li>
-        <li><a href={net('instagram').url} target="_blank" rel="noopener">Escríbeme por Instagram</a></li>
+        <li class="ct-stack">
+          <a href={net('instagram').url} target="_blank" rel="noopener">Escríbeme por Instagram</a>
+          <details class="ct-mail">
+            <summary>{EMAIL}</summary>
+            <div class="ct-mail-menu">
+              <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`} target="_blank" rel="noopener">Escribir con Gmail</a>
+              <a href={`mailto:${EMAIL}`}>Abrir mi app de correo</a>
+              <button type="button" data-copy={EMAIL}>Copiar email</button>
+            </div>
+          </details>
+        </li>
         <li><a href={net('kofi').url} target="_blank" rel="noopener">Invítame a un café</a></li>
       </ul>
     </div>
@@ -144,7 +153,7 @@ const short = (t: string) => (t.length > 58 ? t.slice(0, 56).replace(/[\s,:;]+\S
         ))}
       </ol>
       <div class="tray-work">
-        {WORK.photo && <img src={WORK.photo} alt="Adnan trabajando con un cobot" loading="lazy" width="768" height="1024" />}
+        {WORK.photo && <div class="tray-work-ph"><img src={WORK.photo} alt="Adnan trabajando con un cobot" loading="lazy" width="768" height="1024" /></div>}
         <div>
           <h3>{WORK.title}</h3>
           <p>{WORK.intro}</p>
@@ -187,7 +196,7 @@ const short = (t: string) => (t.length > 58 ? t.slice(0, 56).replace(/[\s,:;]+\S
         }
         // La mascota saluda y dice cosas al hacer clic
         const m = hero.querySelector('.fl-mascot'), bub = m?.querySelector('.fl-bubble');
-        const lines = ['¡Hola! 👋', 'Soy la mascota de noticiasde.ia', '¿Has visto el reel de GTA 6?', 'Pásate por los artículos 📚', '¡Cosquillas no! 😂'];
+        const lines = ['¡Hola! 👋', 'Soy la mascota de noticiasde.ia', '¿Has visto el reel del Flipper One?', 'Pásate por los artículos 📚', '¡Cosquillas no! 😂'];
         let n = 0;
         m?.addEventListener('click', () => { n = (n + 1) % lines.length; bub.textContent = lines[n]; m.classList.remove('is-jump'); void m.offsetWidth; m.classList.add('is-jump'); });
       }
@@ -235,6 +244,15 @@ const short = (t: string) => (t.length > 58 ? t.slice(0, 56).replace(/[\s,:;]+\S
           a.addEventListener('pointermove', (e) => { const b = a.getBoundingClientRect(); a.style.setProperty('--tx', ((e.clientX - b.left) / b.width - .5).toFixed(3)); a.style.setProperty('--ty', ((e.clientY - b.top) / b.height - .5).toFixed(3)); });
           a.addEventListener('pointerleave', () => { a.style.setProperty('--tx', 0); a.style.setProperty('--ty', 0); });
         });
+      }
+
+      /* ── Email: menú con Gmail, app de correo o copiar ── */
+      const mail = document.querySelector('.ct-mail');
+      if (mail) {
+        document.addEventListener('pointerdown', (e) => { if (mail.open && !mail.contains(e.target)) mail.open = false; });
+        mail.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => { mail.open = false; }));
+        const cp = mail.querySelector('[data-copy]');
+        cp.addEventListener('click', async () => { try { await navigator.clipboard.writeText(cp.dataset.copy); cp.textContent = '¡Copiado!'; } catch { cp.textContent = cp.dataset.copy; } setTimeout(() => { cp.textContent = 'Copiar email'; mail.open = false; }, 1200); });
       }
 
       /* ── Trayectoria: panel que se abre desde la foto ── */

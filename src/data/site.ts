@@ -17,6 +17,9 @@ export const AUTHOR = {
   photo: '/redes/adnan.webp' as string | null,
 };
 
+// Email de contacto (sale en la ficha de contacto).
+export const EMAIL = 'adnaneeuu@gmail.com';
+
 export type Social = {
   id: string; name: string; handle: string; url: string; followers?: string;
 };
@@ -29,22 +32,21 @@ export const SOCIALS: Social[] = [
   { id: 'kofi', name: 'Ko-fi', handle: 'invítame a un café', url: 'https://ko-fi.com/adnanbk' },
 ];
 
-// Reels que flotan en la portada (el primero sale más grande).
-// Para cambiar uno: pon la portada (vertical 9:16) en /public/reels/ y el enlace al vídeo.
-const tt = (id: string) => `https://www.tiktok.com/@noticiasde.ia/video/${id}`;
+// Reels de Instagram que flotan en la portada (el primero sale más grande).
+// Para cambiar uno: pon la portada (vertical 9:16) en /public/reels/ y el enlace al reel.
+const ig = (id: string) => `https://www.instagram.com/reel/${id}/`;
 export const REELS: { title: string; img: string; url: string; views: string }[] = [
-  { title: 'Han filtrado el GTA 6 entero', img: '/reels/7710572875488496918.webp', url: tt('7710572875488496918'), views: '65,2K' },
-  { title: '¿Tus repos ya están infectados?', img: '/reels/7711051976435354902.webp', url: tt('7711051976435354902'), views: '975' },
-  { title: 'Una IA de Google dentro de Signal', img: '/reels/7711779860200328470.webp', url: tt('7711779860200328470'), views: '889' },
-  { title: 'Jornadas de 12 h dándole a Enter', img: '/reels/7711117147728170243.webp', url: tt('7711117147728170243'), views: '853' },
-  { title: '4 juegos que te enseñan a programar', img: '/reels/7711277889559432450.webp', url: tt('7711277889559432450'), views: '841' },
+  { title: 'Han sacado el Flipper One', img: '/reels/DfarLxXuGzg.webp', url: ig('DfarLxXuGzg'), views: '362K' },
+  { title: 'El Pirate Bay de la IA… y es legal', img: '/reels/Dfna_qQuTrT.webp', url: ig('Dfna_qQuTrT'), views: '127K' },
+  { title: 'Así se hackea una empresa. Sin IA', img: '/reels/DfjpXicuN6U.webp', url: ig('DfjpXicuN6U'), views: '116K' },
+  { title: 'Claude convertido en un equipo entero', img: '/reels/Dfy2tpQuAM9.webp', url: ig('Dfy2tpQuAM9'), views: '103K' },
 ];
 
-// Cifras de las baldosas del footer. Actualízalas cuando quieras.
+// Cifras de las baldosas del footer (todas las plataformas juntas). Actualízalas cuando quieras.
 export const STATS = [
-  { value: '4,1K', label: 'seguidores en TikTok' },
-  { value: '39,8K', label: 'me gusta' },
-  { value: '65K', label: 'vistas en un reel' },
+  { value: '15K', label: 'seguidores en todas las plataformas' },
+  { value: '+200K', label: 'me gusta' },
+  { value: '+2M', label: 'visualizaciones en total' },
 ];
 
 export const YT_VIDEOS: { title: string; img: string | null; url: string }[] = [
