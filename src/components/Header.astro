@@ -1,21 +1,49 @@
 ---
-const path = Astro.url.pathname;
-const links = [
-  { href: '/', label: 'Mi historia', on: path === '/' || path === '/index.html' },
-  { href: '/#proyectos', label: 'Proyectos', on: false },
-  { href: '/articulos/', label: 'Artículos', on: path.startsWith('/articulos') || path.startsWith('/categoria') },
-  { href: '/#redes', label: 'Redes', on: false },
+// Menú flotante: una píldora arriba en el centro con el logo y el botón MENÚ a la derecha.
+// Al abrirlo, la píldora crece y muestra los enlaces grandes y las redes.
+import { SOCIALS } from '../data/site';
+const big = [
+  { href: '/articulos/', label: 'Artículos' },
+  { href: '/#hago', label: 'Lo que hago' },
+  { href: '/#trayectoria', label: 'Trayectoria' },
 ];
+const small = [
+  { href: '/#contacto', label: 'Contacto' },
+  { href: '/rss.xml', label: 'RSS' },
+];
+const nets = SOCIALS.filter((s) => ['tiktok', 'instagram', 'youtube'].includes(s.id));
 ---
-<header class="site-header">
-  <div class="wrap header-in">
-    <a class="logo" href="/">
-      <img src="/img/mascota-cara.png" alt="" width="40" height="40" />
+<header class="nav-pill" data-nav>
+  <div class="np-bar">
+    <a class="np-logo" href="/" aria-label="noticiasde.ia, inicio">
+      <img src="/img/mascota-cara.png" alt="" width="30" height="30" />
       <span>noticiasde<em>.ia</em></span>
     </a>
-    <nav class="nav" aria-label="Principal">
-      {links.map((l) => <a href={l.href} aria-current={l.on ? 'page' : undefined}>{l.label}</a>)}
-    </nav>
-    <a class="btn btn-sm" href="/articulos/">Leer el blog</a>
+    <button class="np-btn" type="button" aria-expanded="false" aria-controls="np-panel">
+      <span class="np-btn-open">Menú</span><span class="np-btn-close">Cerrar</span>
+      <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><circle cx="2.5" cy="2.5" r="1.6"/><circle cx="9.5" cy="2.5" r="1.6"/><circle cx="2.5" cy="9.5" r="1.6"/><circle cx="9.5" cy="9.5" r="1.6"/></svg>
+    </button>
+  </div>
+  <div class="np-panel" id="np-panel">
+    <div class="np-panel-in">
+      <nav aria-label="Principal">
+        <ul class="np-big">{big.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+        <ul class="np-small">{small.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+      </nav>
+      <ul class="np-nets">{nets.map((s) => (
+        <li><a href={s.url} target="_blank" rel="noopener">{s.name}<svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a></li>
+      ))}</ul>
+    </div>
   </div>
 </header>
+<script is:inline>
+  (() => {
+    const nav = document.querySelector('[data-nav]'); if (!nav) return;
+    const btn = nav.querySelector('.np-btn');
+    const set = (open) => { nav.classList.toggle('is-open', open); btn.setAttribute('aria-expanded', open); };
+    btn.addEventListener('click', () => set(!nav.classList.contains('is-open')));
+    nav.querySelectorAll('.np-panel a').forEach((a) => a.addEventListener('click', () => set(false)));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('is-open')) { set(false); btn.focus(); } });
+    document.addEventListener('pointerdown', (e) => { if (!nav.contains(e.target)) set(false); });
+  })();
+</script>
