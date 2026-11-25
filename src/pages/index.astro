@@ -242,7 +242,7 @@ const short = (t: string) => (t.length > 58 ? t.slice(0, 56).replace(/[\s,:;]+\S
       if (dlg) {
         const open = (e) => { e?.preventDefault(); if (!dlg.open) dlg.showModal(); history.replaceState(null, '', '#trayectoria'); };
         const close = () => { dlg.classList.add('is-closing'); setTimeout(() => { dlg.close(); dlg.classList.remove('is-closing'); }, 260); };
-        document.querySelectorAll('a[href="#trayectoria"], a[href="/#trayectoria"]').forEach((a) => a.addEventListener('click', open));
+        document.querySelectorAll('a[href$="#trayectoria"]').forEach((a) => a.addEventListener('click', open));
         dlg.querySelector('.tray-close').addEventListener('click', close);
         dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
         dlg.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
