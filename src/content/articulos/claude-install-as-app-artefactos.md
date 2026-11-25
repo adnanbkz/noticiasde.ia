@@ -5,6 +5,7 @@ date: 2026-11-25
 category: dev
 tags: ["Claude", "artifacts", "software personal", "apps de escritorio", "prompts"]
 featured: true
+cover: "/img/articulos/claude-install-as-app.webp"
 ---
 
 Desde el 24 de noviembre de 2026, lo que Claude te construye en un chat ya no tiene por qué quedarse en el chat. Anthropic ha lanzado en beta **Install as app**: le describes lo que necesitas, Claude lo construye, pulsas un botón y lo tienes instalado en tu Mac o en tu PC con Windows, con su icono, su propia ventana y, si se lo permites, notificaciones. Sin código y también en el plan gratuito.
