@@ -6,6 +6,7 @@ category: dev
 tags: ["Claude", "artifacts", "software personal", "apps de escritorio", "prompts"]
 featured: true
 cover: "/img/articulos/claude-install-as-app.webp"
+reel: "https://www.instagram.com/reel/DgLAGSfOPxJ/"
 reelCover: "/img/reels/claude-install-as-app-artefactos.webp"
 ---
 
