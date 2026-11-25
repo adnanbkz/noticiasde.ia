@@ -14,7 +14,6 @@ const links = [
       <div class="ft-brand">
         <a class="ft-logo" href="/">noticiasde<em>.ia</em></a>
         <p>{SITE.tagline}</p>
-        <ul class="ft-stats">{STATS.map((s) => <li><b>{s.value}</b><span>{s.label}</span></li>)}</ul>
       </div>
       <nav class="ft-links" aria-label="Pie de página">
         <p class="ft-eyebrow">Links</p>
@@ -23,6 +22,7 @@ const links = [
       <ul class="ft-nets">{SOCIALS.map((s) => (
         <li><a href={s.url} target="_blank" rel="noopener">{s.name}<span class="ft-arrow" aria-hidden="true"><svg viewBox="0 0 12 12" width="11" height="11"><path d="M3 9 9 3M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span></a></li>
       ))}</ul>
+      <ul class="ft-stats">{STATS.map((s) => <li><b>{s.value}</b><span>{s.label}</span></li>)}</ul>
     </div>
 
     <div class="ft-legal">
