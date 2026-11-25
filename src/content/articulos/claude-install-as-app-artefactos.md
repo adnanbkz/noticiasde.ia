@@ -1,15 +1,23 @@
 ---
-title: "Cómo crear un buen artefacto con Claude (y dejar de pagar por apps sencillas)"
-description: "Claude ya convierte sus artefactos en apps de escritorio para Mac y Windows. Cómo pedir uno que funcione de verdad, cinco apps que te puedes hacer hoy con su prompt, y los permisos que conviene mirar antes de instalar nada."
+title: "Cada vez más gente se hará sus propias apps: Claude Install as app y cómo crear un buen artefacto"
+description: "Claude ya convierte lo que construye en apps de escritorio para Mac y Windows. Por qué esto cambia quién hace software, cómo pedir un artefacto que funcione de verdad y qué permisos mirar antes de instalar nada."
 date: 2026-11-25
 category: dev
-tags: ["Claude", "artifacts", "productividad", "apps de escritorio", "prompts"]
+tags: ["Claude", "artifacts", "software personal", "apps de escritorio", "prompts"]
 featured: true
 ---
 
-Desde el 24 de noviembre de 2026, lo que Claude te construye en un chat ya no tiene por qué quedarse en el chat. Anthropic ha lanzado en beta **Install as app**: le pides a Claude un artefacto, pulsas un botón y lo tienes instalado en tu Mac o en tu PC con Windows, con su icono, su propia ventana y, si se lo permites, notificaciones.
+Desde el 24 de noviembre de 2026, lo que Claude te construye en un chat ya no tiene por qué quedarse en el chat. Anthropic ha lanzado en beta **Install as app**: le describes lo que necesitas, Claude lo construye, pulsas un botón y lo tienes instalado en tu Mac o en tu PC con Windows, con su icono, su propia ventana y, si se lo permites, notificaciones. Sin código y también en el plan gratuito.
 
-Eso cambia la cuenta de muchas suscripciones. Hay apps por las que pagamos cada mes que en el fondo son una lista, un temporizador o una tabla con avisos. Este artículo va de cómo hacerte las tuyas bien, no de cómo hacer una demo bonita que abandonas a los dos días.
+Parece una función más, pero creo que es de las que cambian hábitos. Hasta ahora, si necesitabas una herramienta, tenías dos caminos: buscar en una tienda de apps algo que se pareciera a lo que querías, o pagar a alguien para que te la programara. Ahora hay un tercero: hacértela tú, en minutos, exactamente como la necesitas.
+
+## Por qué esto es más grande de lo que parece
+
+Durante décadas, el software lo han hecho unos pocos para muchos. Una empresa detecta un problema común, programa una app para millones de personas y cada uno se adapta a ella como puede. Las necesidades demasiado concretas (las de tu clase, tu tienda o tu forma de trabajar) se quedaban sin app, porque a nadie le salía a cuenta programarla.
+
+Los artefactos de Claude ya permitían crear esas herramientas, pero vivían dentro de una conversación: para usarlas tenías que abrir Claude y buscar el chat. Al convertirlas en apps de escritorio que se abren como cualquier otra y te avisan cuando algo necesita tu atención, pasan de ser una curiosidad a algo que usas cada día. La propia Anthropic lo resume así: si dependes de una herramienta para trabajar, debería abrirse como el resto de tus apps.
+
+Por eso creo que vamos a ver cada vez más gente con sus propias apps. La pregunta deja de ser "¿qué app me descargo?" y pasa a ser "¿qué app me hago?".
 
 ## Qué es exactamente Install as app
 
@@ -27,9 +35,9 @@ Está disponible en los planes Free, Pro, Max, Ultra, Team y Enterprise (en Ente
 
 ## Lo que no te cuentan en los reels
 
-Antes de cancelar nada, conviene saber dónde están los límites:
+Antes de lanzarte, conviene saber dónde están los límites:
 
-- **No hay versión para móvil, web ni Linux.** Si tu lista de tareas tiene que estar en el móvil cuando sales a la calle, una app de escritorio no sustituye del todo a Todoist o a TickTick.
+- **No hay versión para móvil, web ni Linux.** Si lo que necesitas tiene que ir contigo en el móvil, esto todavía no te sirve.
 - **Necesita internet y tener la sesión iniciada** en Claude Desktop para abrirse.
 - **Lo que hace con Claude cuenta para tu plan.** Si tu app llama a Claude cada vez que la abres (para resumir, clasificar o redactar), ese uso sale de los límites de tu suscripción a Claude. Una app que solo guarda datos y muestra tablas apenas gasta.
 - **No sustituye apps complejas.** Una app de música, de mapas o un banco tienen detrás servidores, catálogos y años de trabajo. Lo que sí puedes replicar son las herramientas sencillas: las que son, en el fondo, formularios, listas, temporizadores y avisos.
@@ -62,65 +70,17 @@ Empieza por la versión más simple que resuelva esto y dime qué permisos va a 
 
 La última línea es importante: así sabes de antemano si la app va a pedirte notificaciones o algo más.
 
-## Cinco apps que te puedes hacer hoy
+## Apps para lo que tú necesites
 
-Las he elegido por lo que más busca y paga la gente en productividad: tareas, concentración, hábitos, dinero y calendario. Los precios son orientativos y cambian a menudo.
+Lo interesante no es rehacer las apps que ya existen, sino las que nunca iban a existir porque solo las necesitas tú. Algunas ideas para que veas por dónde va esto:
 
-### 1. Tu lista de tareas (en lugar de Todoist o TickTick)
+- **Si das clase:** una app donde pegas las respuestas de un examen, aplica tu rúbrica y te deja la nota y un comentario por alumno listos para revisar.
+- **Si tienes un negocio pequeño:** un control de pedidos con los campos exactos que usas tú, que te avisa cuando un pedido lleva tres días sin salir.
+- **Si estudias:** un planificador que reparte los temas que te quedan entre los días que faltan para el examen y te avisa cada mañana de lo que toca.
+- **Si trabajas con reuniones:** un panel que, con tus conectores de calendario y correo, te prepara cada reunión con lo último que habéis hablado. Es uno de los ejemplos que enseña la propia Anthropic.
+- **Si programas:** una mini terminal, un gestor de archivos a tu gusto o un panel con el estado de tus proyectos. Felix Rieseberg, ingeniero de Anthropic, cuenta que se ha hecho terminales, gestores de archivos, editores de vídeo y hasta mascotas de escritorio.
 
-Todoist Pro cuesta unos 5 dólares al mes en plan anual. Si trabajas desde el ordenador y no necesitas el móvil, puedes hacerte una a tu medida:
-
-```text
-Hazme una app de tareas para el escritorio. Cada tarea tiene título, proyecto,
-prioridad (alta, media, baja) y fecha opcional. Vistas: Hoy, Próximos 7 días y
-Sin fecha. Atajo de teclado para añadir una tarea rápida. A las 9:00 mándame una
-notificación con las tareas de hoy. Tema oscuro y ventana estrecha.
-```
-
-### 2. Un temporizador Pomodoro en la barra de menús
-
-```text
-Hazme un temporizador Pomodoro que viva en la barra de menús del Mac (o en la
-bandeja de Windows). 25 minutos de trabajo y 5 de descanso, con un descanso
-largo de 15 minutos cada cuatro. Notificación al acabar cada bloque. Que guarde
-cuántos pomodoros hago al día y me enseñe la semana en un gráfico de barras.
-```
-
-### 3. Un tracker de hábitos con rachas
-
-```text
-Hazme un tracker de hábitos. Puedo crear hábitos diarios o de ciertos días de la
-semana. Los marco con un clic. Enséñame la racha actual, la mejor racha y un
-calendario del mes con los días cumplidos en verde. Si a las 21:00 no he marcado
-un hábito de hoy, mándame una notificación.
-```
-
-### 4. Tu control de gastos (en lugar de YNAB y similares)
-
-YNAB ronda los 15 dólares al mes. Para llevar un presupuesto personal sencillo:
-
-```text
-Hazme una app de presupuesto mensual. Defino categorías con un límite al mes
-(comida, transporte, ocio...). Apunto cada gasto con importe, categoría y nota.
-Enséñame cuánto llevo en cada categoría con una barra de progreso y avísame con
-una notificación cuando pase del 80 % de cualquier límite. Que pueda exportar
-el mes a CSV.
-```
-
-Un consejo: no le des a una app así acceso a tu banco ni pegues datos de tus tarjetas. Apunta los gastos a mano o importa un CSV que hayas descargado tú.
-
-### 5. Un preparador de reuniones con tu calendario y tu correo
-
-Es el ejemplo que más está enseñando Anthropic, y el más útil si tienes muchas reuniones:
-
-```text
-Usa mis conectores de Google Calendar y Gmail. Hazme una app que cada mañana
-me enseñe las reuniones del día y, para cada una, un resumen de los últimos
-correos con esas personas y los puntos pendientes. Mándame una notificación
-10 minutos antes de cada reunión con ese resumen.
-```
-
-Esta sí usa Claude cada vez que prepara un resumen, así que gasta de los límites de tu plan.
+Ninguna de estas es una gran app. Ese es justo el punto: son herramientas pequeñas, hechas a la medida de una sola persona, que antes no compensaba que nadie programara.
 
 ## Permisos: lo que tienes que mirar antes de aceptar
 
@@ -131,13 +91,13 @@ Aquí está la parte que más se exagera, en los dos sentidos. Lo que dice la do
 - **Acceso total al ordenador:** permite ejecutar programas y leer, cambiar o borrar archivos sin preguntarte cada vez. Es opcional y solo se puede dar a apps que has hecho tú (o, en Team y Enterprise, gente de tu organización).
 - **Anthropic no revisa las apps antes de instalarlas.** Por eso el permiso vale solo para la versión actual: después de cada actualización, incluidas las tuyas, te lo vuelve a pedir.
 
-Mi regla: ninguna de las cinco apps de arriba necesita acceso total. Si una app de tareas o de hábitos te lo pide, algo has pedido de más. Reserva ese permiso para herramientas que de verdad tienen que trabajar con archivos, como un organizador de descargas, y revisa lo que hace antes de dárselo.
+Mi regla: casi ninguna de las ideas de arriba necesita acceso total. Si una app para apuntar cosas o avisarte te lo pide, algo has pedido de más. Reserva ese permiso para herramientas que de verdad tienen que trabajar con archivos, como un organizador de descargas, y revisa lo que hace antes de dárselo.
 
 ## Mi opinión
 
-No es el fin de las apps, pero sí el fin de pagar cada mes por las más simples. Si una herramienta es en el fondo una lista con avisos, ahora te la puedes hacer a tu medida en diez minutos, con exactamente lo que usas y nada más.
+No es el fin de las apps que usamos todos: las que necesitas en el móvil, las que sincronizan con otra gente o las que tienen detrás un servicio de verdad van a seguir ahí. Lo que cambia es todo lo que había entre medias, esas herramientas pequeñas que nadie te iba a hacer porque solo las querías tú.
 
-Lo que sigue teniendo sentido pagar son las apps que necesitas en el móvil, las que sincronizan con otra gente y las que tienen detrás un servicio de verdad. Para todo lo demás, merece la pena probar antes de renovar la próxima suscripción.
+Igual que las hojas de cálculo hicieron que cualquiera pudiera montar sus propias cuentas sin ser contable, esto hace que cualquiera pueda montar su propia app sin ser programador. Va a haber apps malas, apps abandonadas a los dos días y algún susto con los permisos. Pero también mucha gente resolviendo por fin ese problema concreto que ninguna app de la tienda le resolvía.
 
 ## Fuentes
 
