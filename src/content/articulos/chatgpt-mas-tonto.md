@@ -4,6 +4,7 @@ description: "Lo que hay detrás de la sensación de que los modelos empeoran, y
 date: 2026-10-29
 category: opinion
 tags: ["ChatGPT"]
+draft: true
 featured: false
 ---
 

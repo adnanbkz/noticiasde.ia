@@ -4,6 +4,7 @@ description: "Por qué un texto escondido en una web puede secuestrar a tu agent
 date: 2026-10-23
 category: seguridad
 tags: ["prompt injection", "agentes"]
+draft: true
 featured: false
 ---
 

@@ -4,6 +4,7 @@ description: "DNS, CDNs, balanceadores, bases de datos... El viaje completo de u
 date: 2026-10-31
 category: cloud
 tags: ["backend", "redes"]
+draft: true
 featured: false
 ---
 

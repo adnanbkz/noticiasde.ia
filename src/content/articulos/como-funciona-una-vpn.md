@@ -4,6 +4,7 @@ description: "Túneles, cifrado y la letra pequeña que no te cuentan los anunci
 date: 2026-10-28
 category: explicado
 tags: ["VPN", "privacidad"]
+draft: true
 featured: false
 ---
 

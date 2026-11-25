@@ -4,6 +4,7 @@ description: "La analogía que por fin me hizo entender la diferencia, aplicada 
 date: 2026-11-02
 category: dev
 tags: ["API", "SDK", "OpenAI"]
+draft: true
 featured: false
 ---
 

@@ -1,5 +1,7 @@
 ---
 import { SITE, CATEGORIES, SOCIALS, AUTHOR } from '../data/site';
+import { getCollection } from 'astro:content';
+const usedCats = new Set((await getCollection('articulos', ({ data }) => !data.draft)).map((p) => p.data.category));
 ---
 <footer class="site-footer">
   <div class="wrap footer-in">
@@ -19,7 +21,7 @@ import { SITE, CATEGORIES, SOCIALS, AUTHOR } from '../data/site';
     </div>
     <div>
       <h4>Artículos</h4>
-      <ul>{Object.entries(CATEGORIES).slice(0, 6).map(([k, c]) => <li><a href={`/categoria/${k}/`}>{c.name}</a></li>)}<li><a href="/rss.xml">RSS</a></li></ul>
+      <ul>{Object.entries(CATEGORIES).filter(([k]) => usedCats.has(k as any)).map(([k, c]) => <li><a href={`/categoria/${k}/`}>{c.name}</a></li>)}<li><a href="/rss.xml">RSS</a></li></ul>
     </div>
     <div>
       <h4>Redes</h4>

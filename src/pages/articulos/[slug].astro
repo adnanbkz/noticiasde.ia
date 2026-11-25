@@ -35,14 +35,14 @@ const toc = headings.filter((h) => h.depth === 2);
         {toc.length > 0 && (<nav class="toc"><p class="aside-title">En este artículo</p><ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol></nav>)}
         <div class="share"><p class="aside-title">Compartir</p>
           <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(d.title)}`} target="_blank" rel="noopener">X</a>
-          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=`} target="_blank" rel="noopener">LinkedIn</a>
+          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.href)}`} target="_blank" rel="noopener">LinkedIn</a>
           <a href={`https://wa.me/?text=${encodeURIComponent(d.title)}`} target="_blank" rel="noopener">WhatsApp</a>
         </div>
       </aside>
       <div class="prose"><Content /></div>
-      <aside class="post-reel">
-        <Placeholder img={null} label="El reel de este artículo" hint="Captura del reel" href={d.reel ?? SOCIALS[0].url} />
-      </aside>
+      {d.reel && (<aside class="post-reel">
+        <Placeholder img={null} label="El reel de este artículo" hint="Ver el reel" href={d.reel} />
+      </aside>)}
     </div>
     <div class="wrap post-foot">
       {d.tags.length > 0 && <p class="tags">{d.tags.map((t) => <span>#{t}</span>)}</p>}

@@ -90,7 +90,7 @@ export const PROJECTS = [
   },
 ];
 
-// Repos que se muestran si no se pueden cargar en vivo desde GitHub (ejemplos, cámbialos).
+// Repos que se muestran si no se pueden cargar en vivo desde GitHub .
 export const REPOS_FALLBACK = [
   { name: 'FinallyLoseWeight', description: 'See your progress, keep going.', language: 'TypeScript', stars: 0, url: 'https://github.com/adnanbkz/FinallyLoseWeight' },
   { name: 'asfalcatweb', description: 'Web para la empresa asfalcat.com', language: 'TypeScript', stars: 0, url: 'https://github.com/adnanbkz/asfalcatweb' },
