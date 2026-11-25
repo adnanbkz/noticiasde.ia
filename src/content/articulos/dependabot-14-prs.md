@@ -4,6 +4,7 @@ description: "Mantener dependencias al día sin volverte loco, con un dependabot
 date: 2026-10-27
 category: dev
 tags: ["GitHub", "Dependabot"]
+draft: true
 featured: false
 ---
 

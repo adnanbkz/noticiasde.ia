@@ -4,6 +4,7 @@ description: "Tool calling, buscadores y resúmenes: lo que pasa entre que pregu
 date: 2026-11-04
 category: agentes
 tags: ["tool calling", "búsqueda"]
+draft: true
 featured: true
 ---
 

@@ -4,6 +4,7 @@ description: "Del texto de internet al chatbot que te responde: preentrenamiento
 date: 2026-11-03
 category: modelos
 tags: ["LLM", "entrenamiento"]
+draft: true
 featured: true
 ---
 

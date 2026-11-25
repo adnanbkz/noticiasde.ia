@@ -4,6 +4,7 @@ description: "Hay sistemas que detectan vídeos falsos leyendo el color de tu pi
 date: 2026-11-01
 category: seguridad
 tags: ["deepfakes"]
+draft: true
 featured: true
 ---
 

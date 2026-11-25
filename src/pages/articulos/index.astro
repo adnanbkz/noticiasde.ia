@@ -9,9 +9,10 @@ const side = all.filter((p) => p !== hero).slice(0, 4);
 const bands: CatId[] = ['agentes', 'cloud', 'seguridad', 'camino'];
 const byCat = (k: CatId) => all.filter((p) => p.data.category === k && p !== hero);
 const counts = Object.fromEntries(Object.keys(CATEGORIES).map((k) => [k, all.filter((p) => p.data.category === k).length]));
+const usedCats = Object.entries(CATEGORIES).filter(([k]) => counts[k] > 0);
 const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 ---
-<Base title="Artículos" description="Artículos sobre IA, cloud y desarrollo, escritos a mano por Adnan.">
+<Base title="Artículos" description="Artículos sobre IA, cloud y desarrollo, por Adnan.">
   <div class="ticker-bar">
     <div class="wrap ticker">
       <span class="ticker-label">Lo último</span>
@@ -23,7 +24,7 @@ const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 
 
   <section class="wrap mag-head">
     <h1>Artículos</h1>
-    <p class="lead">IA, cloud y desarrollo explicados por un developer. Todos escritos a mano: la investigación, las frases y los errores son míos.</p>
+    <p class="lead">IA, cloud y desarrollo explicados por un developer.</p>
   </section>
 
   <section class="wrap hero">
@@ -35,7 +36,7 @@ const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 
   </section>
 
   <nav class="wrap cat-pills" aria-label="Secciones">
-    {Object.entries(CATEGORIES).map(([k, c]) => (
+    {usedCats.map(([k, c]) => (
       <a href={`/categoria/${k}/`} style={`--c:${c.color}`}><span class="dot"></span>{c.name}<span class="n">{counts[k]}</span></a>
     ))}
   </nav>
@@ -53,7 +54,7 @@ const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 
     <h2 class="section-title">Todos los artículos</h2>
     <div class="filters" role="group" aria-label="Filtrar por sección">
       <button type="button" class="on" data-f="all">Todo</button>
-      {Object.entries(CATEGORIES).map(([k, c]) => <button type="button" data-f={k} style={`--c:${c.color}`}>{c.short}</button>)}
+      {usedCats.map(([k, c]) => <button type="button" data-f={k} style={`--c:${c.color}`}>{c.short}</button>)}
     </div>
     <div class="grid-3" id="archive">{all.map((p) => <div data-cat={p.data.category}><PostCard post={p} /></div>)}</div>
   </section>

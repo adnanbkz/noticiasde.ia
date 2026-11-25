@@ -4,6 +4,7 @@ description: "Por qué todo el mundo habla de MCP, en qué se diferencia de una 
 date: 2026-11-05
 category: agentes
 tags: ["MCP", "APIs", "agentes"]
+draft: true
 featured: true
 ---
 

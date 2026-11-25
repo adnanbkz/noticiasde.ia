@@ -4,6 +4,7 @@ description: "Arena, obleas, litografía EUV y por qué las GPUs que entrenan la
 date: 2026-10-30
 category: explicado
 tags: ["chips", "GPUs"]
+draft: true
 featured: false
 ---
 

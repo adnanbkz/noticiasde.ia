@@ -4,6 +4,7 @@ description: "Las capas que hay que dominar, de los datos al producto, y en cuá
 date: 2026-10-26
 category: camino
 tags: ["carrera", "AI engineer"]
+draft: true
 featured: true
 ---
 

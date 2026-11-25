@@ -4,6 +4,7 @@ description: "Certificaciones, proyectos y el orden en el que voy a estudiar AWS
 date: 2026-10-25
 category: camino
 tags: ["AWS", "Azure", "certificaciones"]
+draft: true
 featured: false
 ---
 
