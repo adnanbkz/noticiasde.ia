@@ -1,33 +1,35 @@
 ---
-import { SITE, CATEGORIES, SOCIALS, AUTHOR } from '../data/site';
-import { getCollection } from 'astro:content';
-const usedCats = new Set((await getCollection('articulos', ({ data }) => !data.draft)).map((p) => p.data.category));
+import { SITE, SOCIALS, AUTHOR, STATS } from '../data/site';
+const links = [
+  { href: '/articulos/', label: 'Artículos' },
+  { href: '/#hago', label: 'Lo que hago' },
+  { href: '/#trayectoria', label: 'Trayectoria' },
+  { href: '/#contacto', label: 'Contacto' },
+  { href: '/rss.xml', label: 'RSS' },
+];
 ---
-<footer class="site-footer">
-  <div class="wrap footer-in">
-    <div class="footer-brand">
-      <img src="/img/mascota.webp" alt="Mascota de noticiasde.ia" width="140" />
-      <p class="footer-name">noticiasde<em>.ia</em></p>
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <a class="ft-logo" href="/">noticiasde<em>.ia</em></a>
+        <p>{SITE.tagline}</p>
+      </div>
+      <nav class="ft-links" aria-label="Pie de página">
+        <p class="ft-eyebrow">Links</p>
+        <ul>{links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+      </nav>
+      <ul class="ft-nets">{SOCIALS.map((s) => (
+        <li><a href={s.url} target="_blank" rel="noopener">{s.name}<span class="ft-arrow" aria-hidden="true"><svg viewBox="0 0 12 12" width="11" height="11"><path d="M3 9 9 3M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span></a></li>
+      ))}</ul>
+      <ul class="ft-stats">{STATS.map((s) => <li><b>{s.value}</b><span>{s.label}</span></li>)}</ul>
     </div>
-    <div>
-      <h4>Yo</h4>
-      <ul>
-        <li><a href="/">Mi historia</a></li>
-        <li><a href="/#proyectos">Proyectos</a></li>
-        <li><a href="/#github">GitHub</a></li>
-      </ul>
+
+    <div class="ft-legal">
+      <span>© {new Date().getFullYear()} {AUTHOR.name} · {SITE.name}</span>
+      <a href="/rss.xml">RSS</a>
+      <span>Sin cookies de seguimiento</span>
+      <span>Hecho con Astro</span>
     </div>
-    <div>
-      <h4>Artículos</h4>
-      <ul>{Object.entries(CATEGORIES).filter(([k]) => usedCats.has(k as any)).map(([k, c]) => <li><a href={`/categoria/${k}/`}>{c.name}</a></li>)}<li><a href="/rss.xml">RSS</a></li></ul>
-    </div>
-    <div>
-      <h4>Redes</h4>
-      <ul>{SOCIALS.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.name}</a></li>)}</ul>
-    </div>
-  </div>
-  <div class="wrap footer-legal">
-    <span>© {new Date().getFullYear()} {AUTHOR.name} · {SITE.name}</span>
-    <span>Hecho con Astro. Sin cookies de seguimiento.</span>
   </div>
 </footer>

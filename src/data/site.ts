@@ -17,6 +17,9 @@ export const AUTHOR = {
   photo: '/redes/adnan.webp' as string | null,
 };
 
+// Email de contacto (sale en la ficha de contacto).
+export const EMAIL = 'adnaneeuu@gmail.com';
+
 export type Social = {
   id: string; name: string; handle: string; url: string; followers?: string;
 };
@@ -29,13 +32,21 @@ export const SOCIALS: Social[] = [
   { id: 'kofi', name: 'Ko-fi', handle: 'invítame a un café', url: 'https://ko-fi.com/adnanbk' },
 ];
 
-// Huecos para capturas de tus redes. Sube la imagen a /public/redes/ y pon la ruta en `img`.
-export const REELS: { title: string; img: string | null; url: string; views?: string }[] = [
-  { title: 'MCP vs API en 90 segundos', img: null, url: 'https://www.instagram.com/noticiasde.ia/' },
-  { title: 'Cómo busca la IA en internet', img: null, url: 'https://www.instagram.com/noticiasde.ia/' },
-  { title: 'Qué hay detrás de todo internet', img: null, url: 'https://www.instagram.com/noticiasde.ia/' },
-  { title: 'Cómo se fabrica un ChatGPT', img: null, url: 'https://www.instagram.com/noticiasde.ia/' },
-  { title: 'API vs SDK con un drive-thru', img: null, url: 'https://www.instagram.com/noticiasde.ia/' },
+// Reels de Instagram que flotan en la portada (el primero sale más grande).
+// Para cambiar uno: pon la portada (vertical 9:16) en /public/reels/ y el enlace al reel.
+const ig = (id: string) => `https://www.instagram.com/reel/${id}/`;
+export const REELS: { title: string; img: string; url: string; views: string }[] = [
+  { title: 'Han sacado el Flipper One', img: '/reels/DfarLxXuGzg.webp', url: ig('DfarLxXuGzg'), views: '362K' },
+  { title: 'El Pirate Bay de la IA… y es legal', img: '/reels/Dfna_qQuTrT.webp', url: ig('Dfna_qQuTrT'), views: '127K' },
+  { title: 'Así se hackea una empresa. Sin IA', img: '/reels/DfjpXicuN6U.webp', url: ig('DfjpXicuN6U'), views: '116K' },
+  { title: 'Claude convertido en un equipo entero', img: '/reels/Dfy2tpQuAM9.webp', url: ig('Dfy2tpQuAM9'), views: '103K' },
+];
+
+// Cifras de las baldosas del footer (todas las plataformas juntas). Actualízalas cuando quieras.
+export const STATS = [
+  { value: '15K', label: 'seguidores en todas las plataformas' },
+  { value: '+200K', label: 'me gusta' },
+  { value: '+2M', label: 'visualizaciones en total' },
 ];
 
 export const YT_VIDEOS: { title: string; img: string | null; url: string }[] = [

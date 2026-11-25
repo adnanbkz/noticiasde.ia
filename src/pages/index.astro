@@ -1,209 +1,272 @@
 ---
 import Base from '../layouts/Base.astro';
-import PostCard from '../components/PostCard.astro';
-import Placeholder from '../components/Placeholder.astro';
+import Cover from '../components/Cover.astro';
 import { getCollection } from 'astro:content';
-import { AUTHOR, WORK, PROJECTS, STORY, SOCIALS, REPOS_FALLBACK } from '../data/site';
+import { AUTHOR, WORK, PROJECTS, STORY, SOCIALS, REELS, CATEGORIES, EMAIL } from '../data/site';
+
 const posts = (await getCollection('articulos', ({ data }) => !data.draft)).sort((a, b) => +b.data.date - +a.data.date);
-const [lead, ...rest] = posts;
-const tiktok = SOCIALS.find((x) => x.id === 'tiktok')!;
-const langColor: Record<string, string> = { TypeScript: '#3178c6', JavaScript: '#f1e05a', Python: '#3572A5', Astro: '#ff5a03', HCL: '#844FBA', Go: '#00ADD8', Rust: '#dea584', 'C++': '#f34b7d', Shell: '#89e051', Java: '#b07219', Kotlin: '#A97BFF', 'C#': '#178600', HTML: '#e34c26', CSS: '#663399' };
+const latest = posts[0];
+const net = (id: string) => SOCIALS.find((s) => s.id === id)!;
+
+// Posiciones de lo que flota en el hero. x/y en % del hero, w = ancho en px a 1440 de pantalla,
+// d = profundidad (cuánto se mueve con el ratón y el scroll), r = giro. m* = versión móvil (mw=0 la oculta).
+const spots = [
+  { x: 80, y: 11, w: 172, d: 1.1, r: 4,  mx: 64, my: 11, mw: 104 },
+  { x: 21, y: 6,  w: 112, d: .45, r: -5, mx: 0,  my: 0,  mw: 0 },
+  { x: 87, y: 56, w: 128, d: .75, r: -3, mx: 74, my: 71, mw: 78 },
+  { x: 25, y: 71, w: 108, d: .55, r: 6,  mx: 0,  my: 0,  mw: 0 },
+];
+type Mix = { kind: 'project' | 'post'; title: string; tags: string[]; href: string; ext: boolean; img?: string | null; post?: (typeof posts)[number] };
+const projects: Mix[] = PROJECTS.map((p) => ({ kind: 'project', title: p.name, tags: p.stack.slice(0, 2), href: p.url || '#trayectoria', ext: !!p.url, img: p.img }));
+const articles: Mix[] = posts.slice(0, 5).map((p) => ({ kind: 'post', title: p.data.title, tags: [CATEGORIES[p.data.category].short], href: `/articulos/${p.id}/`, ext: false, post: p }));
+const cards: Mix[] = [];
+for (let i = 0; i < Math.max(projects.length, articles.length); i++) { if (articles[i]) cards.push(articles[i]); if (projects[i]) cards.push(projects[i]); }
+const short = (t: string) => (t.length > 58 ? t.slice(0, 56).replace(/[\s,:;]+\S*$/, '') + '…' : t);
 ---
-<Base title="Adnan" description={AUTHOR.bio}>
-  <!-- Hero: el foco eres tú -->
-  <section class="me">
-    <div class="wrap me-in">
-      <div class="me-text">
-        <h1>Hola, soy <span class="me-name">Adnan.</span></h1>
-        <p class="me-lead">Programo cobots, hago vídeos de IA en <a href={SOCIALS[0].url} target="_blank" rel="noopener">@noticiasde.ia</a> y estoy aprendiendo en público a ser <strong>AI & Cloud engineer</strong>.</p>
-        <div class="me-actions">
-          <a class="btn btn-light" href="#historia">Mi historia</a>
-          <a class="btn btn-line" href="/articulos/">Leer los artículos</a>
-        </div>
-        <ul class="me-facts">
-          <li><b>2 años</b> como software developer</li>
-          <li><b>Cobots</b> en el trabajo</li>
-          <li><b>{posts.length}</b> artículos publicados</li>
-        </ul>
-      </div>
-      <figure class="me-photo">
-        <Placeholder img={AUTHOR.photo} label="" ratio="4/5" hint="Tu foto aquí (vertical, 4:5)" />
-        <img class="me-mascot" src="/img/mascota.webp" alt="La mascota de noticiasde.ia saludando" width="240" />
-        <figcaption class="note note-a">
-          este soy yo
-          <svg viewBox="0 0 120 60" aria-hidden="true"><path d="M4 10 C40 6 80 18 104 46" /><path d="M92 44 l13 4 -2 -13" /></svg>
-        </figcaption>
-        <span class="note note-b" aria-hidden="true">
-          <svg viewBox="0 0 120 60"><path d="M116 50 C80 52 40 40 14 14" /><path d="M14 28 l-1 -14 13 2" /></svg>
-          y él, mi mascota
+<Base title="Adnan" description={AUTHOR.bio} home>
+
+  <!-- ───────── Hero flotante ───────── -->
+  <section class="hero" data-hero>
+    <div class="hero-bands" aria-hidden="true"></div>
+
+    <div class="hero-copy" data-copy>
+      <p class="hero-hi">Hola, soy Adnan 👋</p>
+      <h1><span class="hero-a">IA explicada</span><span class="hero-b">por un developer.</span></h1>
+      <p class="hero-sub">Programo cobots y cuento la IA en reels de un minuto.</p>
+    </div>
+
+    <div class="floaters">
+      {REELS.map((r, i) => { const s = spots[i]; return (
+        <a class={`fl fl-reel ${i === 0 ? 'is-top' : ''}`} href={r.url} target="_blank" rel="noopener"
+          style={`--x:${s.x}%;--y:${s.y}%;--w:${s.w};--d:${s.d};--r:${s.r}deg;--mx:${s.mx}%;--my:${s.my}%;--mw:${s.mw};--i:${i}`}
+          data-d={s.d} data-hidem={s.mw === 0 ? '' : undefined} aria-label={`Ver en Instagram: ${r.title} (${r.views} visualizaciones)`}>
+          <span class="fl-in">
+            <img src={r.img} alt="" width="360" height="640" loading="eager" />
+            <span class="fl-views"><svg viewBox="0 0 10 10" width="9" height="9" aria-hidden="true"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg>{r.views}</span>
+            <span class="fl-title">{r.title}</span>
+            {i === 0 && <span class="fl-badge">El más visto</span>}
+          </span>
+        </a>
+      ); })}
+
+      <a class="fl fl-post" href={`/articulos/${latest.id}/`} style="--x:3%;--y:14%;--w:262;--d:.65;--r:-3deg;--mx:4%;--my:9%;--mw:178;--i:5" data-d=".65">
+        <span class="fl-in">
+          <span class="fl-post-cover"><Cover slug={latest.id} category={latest.data.category} cover={latest.data.cover} /></span>
+          <span class="fl-post-text">
+            <span class="fl-eyebrow"><i></i>Último artículo</span>
+            <strong>{short(latest.data.title)}</strong>
+          </span>
         </span>
-      </figure>
+      </a>
+
+      <a class="fl fl-me" href="#trayectoria" style="--x:6%;--y:53%;--w:186;--d:.9;--r:-4deg;--mx:5%;--my:68%;--mw:112;--i:6" data-d=".9" aria-label="Abrir mi trayectoria">
+        <span class="fl-in">
+          <span class="fl-bubble fl-bubble-me">Mi historia</span>
+          <span class="fl-photo"><img src={AUTHOR.photo ?? '/img/mascota-cara.png'} alt="Adnan" width="614" height="768" /></span>
+        </span>
+      </a>
+
+      <button class="fl fl-mascot" type="button" style="--x:69%;--y:63%;--w:180;--d:1.3;--r:0deg;--mx:40%;--my:77%;--mw:96;--i:7" data-d="1.3" aria-label="Saludar a la mascota">
+        <span class="fl-in">
+          <span class="fl-bubble" aria-live="polite">¡Hola! 👋</span>
+          <img src="/img/mascota.webp" alt="La mascota de noticiasde.ia saludando" width="700" height="595" />
+        </span>
+      </button>
+    </div>
+
+    <a class="hero-scroll" href="#hago" aria-label="Bajar a lo que hago"><span></span></a>
+  </section>
+
+  <!-- ───────── Carrusel: lo que hago ───────── -->
+  <section class="showcase" id="hago" data-showcase>
+    <div class="sc-pin">
+      <h2 class="sc-title">Lo que <em>hago</em></h2>
+      <div class="sc-track">
+        {cards.map((c, i) => (
+          <div class="sc-card" style={`--i:${i}`}>
+            <div class="sc-card-in">
+              <a class="sc-link" href={c.href} target={c.ext ? '_blank' : undefined} rel={c.ext ? 'noopener' : undefined}>
+                <span class="sc-media">
+                  {c.kind === 'post' && c.post ? <Cover slug={c.post.id} category={c.post.data.category} cover={c.post.data.cover} mascot={!c.post.data.cover} /> :
+                   c.img ? <img src={c.img} alt="" loading="lazy" /> : null}
+                </span>
+                <span class="sc-tags"><span class="sc-kind">{c.kind === 'post' ? 'Artículo' : 'Proyecto'}</span>{c.tags.map((t) => <span>{t}</span>)}</span>
+                <span class="sc-foot">
+                  <strong>{c.title}</strong>
+                  <span class="sc-go" aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </span>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="sc-ring" aria-hidden="true">
+        <svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" class="sc-ring-bg"/><circle cx="30" cy="30" r="26" class="sc-ring-fg" pathLength="100"/></svg>
+        <span data-count>1</span>
+      </div>
     </div>
   </section>
 
-  <!-- Lo que hago -->
-  <section class="work wrap" id="trabajo">
-    <div class="work-photo"><Placeholder img={WORK.photo} label="" ratio="3/4" hint="Foto tuya con un cobot" /></div>
-    <div class="work-text">
-      <h2>{WORK.title}</h2>
-      <p class="lead">{WORK.intro}</p>
-      <dl class="work-facts">
-        {WORK.facts.map((f) => <div><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
-      </dl>
+  <!-- ───────── Ficha de contacto ───────── -->
+  <section class="contact wrap" id="contacto">
+    <div class="ct-photo"><img src={AUTHOR.photo ?? '/img/mascota.webp'} alt="Adnan" loading="lazy" width="614" height="768" /></div>
+    <div class="ct-card">
+      <h2><span>¿Te gusta la IA</span><em>contada sin humo?</em></h2>
+      <ul class="ct-links">
+        <li><a href={net('tiktok').url} target="_blank" rel="noopener">Sígueme en TikTok</a></li>
+        <li><a href={net('instagram').url} target="_blank" rel="noopener">Escríbeme por Instagram</a></li>
+        <li><a href={net('kofi').url} target="_blank" rel="noopener">Invítame a un café</a></li>
+        <li class="ct-mail-li">
+          <details class="ct-mail">
+            <summary>{EMAIL}</summary>
+            <div class="ct-mail-menu">
+              <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`} target="_blank" rel="noopener">Escribir con Gmail</a>
+              <a href={`mailto:${EMAIL}`}>Abrir mi app de correo</a>
+              <button type="button" data-copy={EMAIL}>Copiar email</button>
+            </div>
+          </details>
+        </li>
+      </ul>
     </div>
   </section>
 
-  <!-- Historia -->
-  <section class="story" id="historia">
-    <div class="wrap">
-      <h2 class="section-title">Mi historia</h2>
-      <p class="lead story-lead">{AUTHOR.bio}</p>
-      <ol class="path">
+  <!-- ───────── Trayectoria (se abre desde la foto) ───────── -->
+  <dialog class="tray" id="trayectoria" aria-labelledby="tray-title">
+    <div class="tray-in">
+      <button class="tray-close" type="button" aria-label="Cerrar trayectoria">Cerrar <span aria-hidden="true">×</span></button>
+      <div class="tray-head">
+        <img src={AUTHOR.photo ?? '/img/mascota-cara.png'} alt="" width="96" height="96" />
+        <div>
+          <p class="tray-eyebrow">Mi trayectoria</p>
+          <h2 id="tray-title">{AUTHOR.name}</h2>
+          <p class="tray-role">{AUTHOR.role}</p>
+        </div>
+      </div>
+      <p class="tray-bio">{AUTHOR.bio}</p>
+      <ol class="tray-path">
         {STORY.map((s, i) => (
           <li class={i === 2 ? 'is-now' : i > 2 ? 'is-next' : ''}>
-            <span class="path-when">{s.when}</span>
+            <span class="tray-when">{s.when}{i === 2 && <em> · estoy aquí</em>}</span>
             <h3>{s.title}</h3>
             <p>{s.text}</p>
-            {i === 2 && <span class="hand path-here">estoy aquí</span>}
           </li>
         ))}
       </ol>
-    </div>
-  </section>
-
-  <!-- Proyectos -->
-  <section class="wrap projects" id="proyectos">
-    <h2 class="section-title">Proyectos</h2>
-    {PROJECTS.map((p, i) => (
-      <article class={`project ${i % 2 ? 'project-rev' : ''}`}>
-        <Placeholder img={p.img} label="" ratio="16/10" hint={i === 0 ? "Captura de tus interfaces de soldadura" : "Captura del proyecto"} />
-        <div class="project-text">
-          <h3>{p.name}</h3>
-          <p>{p.what}</p>
-          <ul class="chips">{p.stack.map((t) => <li>{t}</li>)}</ul>
-          {p.url && <a class="arrow-link" href={p.url} target="_blank" rel="noopener">{p.cta}</a>}
+      <div class="tray-work">
+        {WORK.photo && <div class="tray-work-ph"><img src={WORK.photo} alt="Adnan trabajando con un cobot" loading="lazy" width="768" height="1024" /></div>}
+        <div>
+          <h3>{WORK.title}</h3>
+          <p>{WORK.intro}</p>
+          <dl>{WORK.facts.map((f) => <div><dt>{f.label}</dt><dd>{f.value}</dd></div>)}</dl>
         </div>
-      </article>
-    ))}
-  </section>
-
-  <!-- GitHub -->
-  <section class="gh" id="github">
-    <div class="wrap">
-      <div class="gh-head">
-        <h2 class="section-title">En GitHub</h2>
-        <a class="arrow-link" href={`https://github.com/${AUTHOR.github}`} target="_blank" rel="noopener">github.com/{AUTHOR.github}</a>
       </div>
-      <ul class="gh-stats" id="gh-stats" aria-live="polite">
-        <li><b data-k="repos">–</b>repos públicos</li>
-        <li><b data-k="stars">–</b>estrellas</li>
-        <li><b data-k="followers">–</b>seguidores</li>
-        <li><b data-k="last">–</b>última actividad</li>
-      </ul>
-      <div class="gh-cal" id="gh-cal" data-user={AUTHOR.github}>
-        <p class="gh-cal-title"><b data-k="contribs">–</b> contribuciones en el último año</p>
-        <div class="gh-cal-scroll"><div class="gh-cal-grid" role="img" aria-label="Calendario de contribuciones en GitHub"></div></div>
-        <p class="gh-cal-legend">Menos <i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i> Más</p>
-      </div>
-      <div class="repos" id="repos" data-user={AUTHOR.github}>
-        {REPOS_FALLBACK.map((r) => (
-          <a class="repo" href={r.url} target="_blank" rel="noopener">
-            <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.71 1.71.75.75 0 0 1-1.06 1.06A2.5 2.5 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.71A2.5 2.5 0 0 1 4.5 9h8Z"/></svg>
-            <strong>{r.name}</strong>
-            <p>{r.description}</p>
-            <span class="repo-meta"><span class="lang" style={`--l:${langColor[r.language] ?? '#999'}`}></span>{r.language}<span>★ {r.stars}</span></span>
-          </a>
-        ))}
-      </div>
+      <a class="btn" href={`https://github.com/${AUTHOR.github}`} target="_blank" rel="noopener">Ver mi GitHub</a>
     </div>
-  </section>
+  </dialog>
+
   <script is:inline>
-    (async () => {
-      const cal = document.getElementById('gh-cal'); if (!cal) return;
-      try {
-        const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${cal.dataset.user}?y=last`);
-        if (!res.ok) throw 0;
-        const data = await res.json();
-        const days = data.contributions || [];
-        cal.querySelector('[data-k="contribs"]').textContent = data.total?.lastYear ?? days.reduce((n, d) => n + d.count, 0);
-        const grid = cal.querySelector('.gh-cal-grid');
-        const pad = days.length ? new Date(days[0].date + 'T12:00:00').getDay() : 0;
-        const frag = document.createDocumentFragment();
-        for (let i = 0; i < pad; i++) frag.append(document.createElement('span'));
-        days.forEach((d) => { const c = document.createElement('i'); c.className = 'l' + d.level; c.title = `${d.count} el ${d.date}`; frag.append(c); });
-        grid.append(frag);
-        cal.classList.add('is-ready');
-      } catch (e) { cal.classList.add('is-off'); }
-    })();
-  </script>
-  <script is:inline define:vars={{ langColor }}>
-    (async () => {
-      const box = document.getElementById('repos'); if (!box) return;
-      try {
-        const user = box.dataset.user;
-        const [ru, rr] = await Promise.all([fetch(`https://api.github.com/users/${user}`), fetch(`https://api.github.com/users/${user}/repos?sort=pushed&per_page=100`)]);
-        if (!rr.ok) return;
-        const all = (await rr.json()).filter((r) => !r.fork);
-        const set = (k, v) => { const el = document.querySelector(`#gh-stats [data-k="${k}"]`); if (el) el.textContent = v; };
-        if (ru.ok) { const u = await ru.json(); set('repos', u.public_repos); set('followers', u.followers); }
-        set('stars', all.reduce((n, r) => n + r.stargazers_count, 0));
-        if (all[0]) {
-          const days = Math.round((Date.now() - new Date(all[0].pushed_at)) / 864e5);
-          set('last', days <= 0 ? 'hoy' : days === 1 ? 'ayer' : `hace ${days} días`);
+    (() => {
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+      /* ── Hero: entrada, parallax 3D con el ratón y deriva con el scroll ── */
+      const hero = document.querySelector('[data-hero]');
+      if (hero) {
+        requestAnimationFrame(() => hero.classList.add('is-in'));
+        const fls = [...hero.querySelectorAll('.fl')].map((el) => ({ el, d: +el.dataset.d || 1 }));
+        const copy = hero.querySelector('[data-copy]');
+        let mx = 0, my = 0, cx = 0, cy = 0, on = true;
+        if (!reduce) {
+          addEventListener('pointermove', (e) => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; }, { passive: true });
+          new IntersectionObserver(([e]) => { on = e.isIntersecting; if (on) loop(); }).observe(hero);
+          const loop = () => {
+            if (!on) return;
+            cx += (mx - cx) * .07; cy += (my - cy) * .07;
+            const sy = scrollY;
+            for (const f of fls) {
+              const tx = -cx * 46 * f.d, ty = -cy * 34 * f.d - sy * .22 * f.d;
+              f.el.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotateX(${cy * -14 * f.d}deg) rotateY(${cx * 18 * f.d}deg)`;
+            }
+            const k = clamp(sy / innerHeight, 0, 1);
+            copy.style.transform = `translate3d(${cx * -10}px, ${sy * .12}px, 0) scale(${1 - k * .08})`;
+            copy.style.opacity = 1 - k * .9;
+            requestAnimationFrame(loop);
+          };
+          loop();
         }
-        const repos = [...all].slice(0, 6); // los 6 con actividad más reciente
-        if (!repos.length) return;
-        const tpl = box.querySelector('.repo');
-        box.replaceChildren(...repos.map((r) => {
-          const el = tpl.cloneNode(true);
-          el.href = r.html_url;
-          el.querySelector('strong').textContent = r.name;
-          el.querySelector('p').textContent = r.description || 'Sin descripción todavía.';
-          const meta = el.querySelector('.repo-meta');
-          meta.innerHTML = '';
-          const dot = document.createElement('span'); dot.className = 'lang'; dot.style.setProperty('--l', langColor[r.language] || '#999');
-          const star = document.createElement('span'); star.textContent = `★ ${r.stargazers_count}`;
-          meta.append(dot, document.createTextNode(r.language || 'Varios'), star);
-          return el;
-        }));
-      } catch (e) { /* se quedan los de ejemplo */ }
+        // La mascota saluda y dice cosas al hacer clic
+        const m = hero.querySelector('.fl-mascot'), bub = m?.querySelector('.fl-bubble');
+        const lines = ['¡Hola! 👋', 'Soy la mascota de noticiasde.ia', '¿Has visto el reel del Flipper One?', 'Pásate por los artículos 📚', '¡Cosquillas no! 😂'];
+        let n = 0;
+        m?.addEventListener('click', () => { n = (n + 1) % lines.length; bub.textContent = lines[n]; m.classList.remove('is-jump'); void m.offsetWidth; m.classList.add('is-jump'); });
+      }
+
+      /* ── Carrusel fijado: las tarjetas cruzan la pantalla en 3D al hacer scroll ── */
+      const sc = document.querySelector('[data-showcase]');
+      if (sc) {
+        const track = sc.querySelector('.sc-track');
+        const cards = [...track.children];
+        const inner = cards.map((c) => c.firstElementChild);
+        const ring = sc.querySelector('.sc-ring-fg'), count = sc.querySelector('[data-count]');
+        if (reduce) { sc.classList.add('is-static'); }
+        else {
+          let dist = 0, cur = 0, vel = 0, on = false;
+          const base = cards.map((_, i) => [-7, 4, -3, 6, -5, 3][i % 6]);
+          const lift = cards.map((_, i) => [-10, 6, -4, 9, -8, 2][i % 6]);
+          const measure = () => {
+            dist = Math.max(0, track.scrollWidth - innerWidth);
+            sc.style.height = `${dist + innerHeight}px`;
+          };
+          const frame = () => {
+            if (!on) return;
+            const r = sc.getBoundingClientRect();
+            const p = clamp(-r.top / Math.max(1, sc.offsetHeight - innerHeight), 0, 1);
+            const prev = cur; cur += (p * dist - cur) * .1; vel += ((cur - prev) - vel) * .2;
+            track.style.transform = `translate3d(${-cur}px, 0, 0)`;
+            let best = 0, bestD = 1e9;
+            cards.forEach((c, i) => {
+              const center = (c.offsetLeft + c.offsetWidth / 2 - cur) / innerWidth - .5;
+              if (Math.abs(center) < bestD) { bestD = Math.abs(center); best = i; }
+              const ry = clamp(center * -40, -32, 32);
+              const rz = base[i] + clamp(vel * .25, -10, 10);
+              const z = -Math.abs(center) * 180;
+              inner[i].style.transform = `translate3d(0, ${lift[i]}%, ${z}px) rotateY(${ry}deg) rotateZ(${rz}deg)`;
+            });
+            ring.style.strokeDashoffset = 100 - p * 100;
+            count.textContent = best + 1;
+            requestAnimationFrame(frame);
+          };
+          measure(); addEventListener('resize', measure);
+          new IntersectionObserver(([e]) => { on = e.isIntersecting; if (on) frame(); }, { rootMargin: '100px' }).observe(sc);
+        }
+        // Inclinación 3D de cada tarjeta siguiendo el ratón
+        sc.querySelectorAll('.sc-link').forEach((a) => {
+          a.addEventListener('pointermove', (e) => { const b = a.getBoundingClientRect(); a.style.setProperty('--tx', ((e.clientX - b.left) / b.width - .5).toFixed(3)); a.style.setProperty('--ty', ((e.clientY - b.top) / b.height - .5).toFixed(3)); });
+          a.addEventListener('pointerleave', () => { a.style.setProperty('--tx', 0); a.style.setProperty('--ty', 0); });
+        });
+      }
+
+      /* ── Email: menú con Gmail, app de correo o copiar ── */
+      const mail = document.querySelector('.ct-mail');
+      if (mail) {
+        document.addEventListener('pointerdown', (e) => { if (mail.open && !mail.contains(e.target)) mail.open = false; });
+        mail.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => { mail.open = false; }));
+        const cp = mail.querySelector('[data-copy]');
+        cp.addEventListener('click', async () => { try { await navigator.clipboard.writeText(cp.dataset.copy); cp.textContent = '¡Copiado!'; } catch { cp.textContent = cp.dataset.copy; } setTimeout(() => { cp.textContent = 'Copiar email'; mail.open = false; }, 1200); });
+      }
+
+      /* ── Trayectoria: panel que se abre desde la foto ── */
+      const dlg = document.getElementById('trayectoria');
+      if (dlg) {
+        const open = (e) => { e?.preventDefault(); if (!dlg.open) dlg.showModal(); history.replaceState(null, '', '#trayectoria'); };
+        const close = () => { dlg.classList.add('is-closing'); setTimeout(() => { dlg.close(); dlg.classList.remove('is-closing'); }, 260); };
+        document.querySelectorAll('a[href$="#trayectoria"]').forEach((a) => a.addEventListener('click', open));
+        dlg.querySelector('.tray-close').addEventListener('click', close);
+        dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
+        dlg.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
+        dlg.addEventListener('close', () => { if (location.hash === '#trayectoria') history.replaceState(null, '', location.pathname); });
+        if (location.hash === '#trayectoria') open();
+      }
     })();
   </script>
-
-  <!-- Artículos -->
-  <section class="wrap latest">
-    <div class="gh-head">
-      <h2 class="section-title">Lo último que he escrito</h2>
-      <a class="arrow-link" href="/articulos/">Todos los artículos</a>
-    </div>
-    <div class="latest-grid">
-      <PostCard post={lead} variant="big" mascot />
-      <div class="latest-list">{rest.slice(0, 4).map((p) => <PostCard post={p} variant="row" />)}</div>
-    </div>
-  </section>
-
-  <!-- Redes -->
-  <section class="social" id="redes">
-    <div class="wrap">
-      <h2 class="section-title">Donde me puedes ver</h2>
-      <ul class="social-links">{SOCIALS.map((s) => (
-        <li><a class={`net net-${s.id}`} href={s.url} target="_blank" rel="noopener"><span class="net-dot"></span><strong>{s.name}</strong><span>{s.handle}</span></a></li>
-      ))}</ul>
-      <div class="tiktok-box">
-        <div class="tiktok-cta">
-          <img src="/img/mascota-cara.png" alt="" width="72" height="72" />
-          <h3>Mis últimos TikToks</h3>
-          <p>Vídeos de un minuto explicando IA y tecnología en español. Se actualizan solos cada vez que subo uno nuevo.</p>
-          <a class="btn" href={tiktok.url} target="_blank" rel="noopener">Abrir {tiktok.handle}</a>
-        </div>
-        <div class="tiktok-embed-wrap">
-          <blockquote class="tiktok-embed" cite={tiktok.url} data-unique-id={tiktok.handle.replace('@', '')} data-embed-type="creator" style="max-width: 780px; min-width: 288px;">
-            <section><a target="_blank" rel="noopener" href={`${tiktok.url}?refer=creator_embed`}>{tiktok.handle} en TikTok</a></section>
-          </blockquote>
-          <script is:inline async src="https://www.tiktok.com/embed.js"></script>
-        </div>
-      </div>
-    </div>
-  </section>
-
 </Base>
