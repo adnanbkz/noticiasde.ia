@@ -39,8 +39,8 @@ const toc = headings.filter((h) => h.depth === 2);
         </div>
       </aside>
       <div class="prose"><Content /></div>
-      {d.reel && (<aside class="post-reel">
-        <Placeholder img={null} label="El reel de este artículo" hint="Ver el reel" href={d.reel} />
+      {d.reelCover && (<aside class="post-reel">
+        <Placeholder img={d.reelCover} label="El reel de este artículo" hint="Ver el reel" href={d.reel ?? SOCIALS[0].url} />
       </aside>)}
     </div>
     <div class="wrap post-foot">
