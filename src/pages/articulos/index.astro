@@ -12,7 +12,7 @@ const counts = Object.fromEntries(Object.keys(CATEGORIES).map((k) => [k, all.fil
 const usedCats = Object.entries(CATEGORIES).filter(([k]) => counts[k] > 0);
 const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 ---
-<Base title="Artículos" description="Artículos sobre IA, cloud y desarrollo, escritos a mano por Adnan.">
+<Base title="Artículos" description="Artículos sobre IA, cloud y desarrollo, por Adnan.">
   <div class="ticker-bar">
     <div class="wrap ticker">
       <span class="ticker-label">Lo último</span>
@@ -24,7 +24,7 @@ const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 
 
   <section class="wrap mag-head">
     <h1>Artículos</h1>
-    <p class="lead">IA, cloud y desarrollo explicados por un developer. Todos escritos a mano: la investigación, las frases y los errores son míos.</p>
+    <p class="lead">IA, cloud y desarrollo explicados por un developer.</p>
   </section>
 
   <section class="wrap hero">

@@ -26,7 +26,6 @@ const toc = headings.filter((h) => h.depth === 2);
       <div class="byline">
         <img src={AUTHOR.photo ?? '/img/mascota-cara.png'} alt="" width="44" height="44" />
         <div><strong>{AUTHOR.name}</strong><span class="muted"> · {date} · {mins} min de lectura</span></div>
-        <span class="stamp">escrito a mano<small>sin IA</small></span>
       </div>
     </header>
     <div class="wrap post-cover"><Cover slug={post.id} category={d.category} cover={d.cover} alt={d.title} mascot /></div>
@@ -47,8 +46,7 @@ const toc = headings.filter((h) => h.depth === 2);
     <div class="wrap post-foot">
       {d.tags.length > 0 && <p class="tags">{d.tags.map((t) => <span>#{t}</span>)}</p>}
       <div class="handnote">
-        <p class="hand big-hand">Escrito a mano por {AUTHOR.name}</p>
-        <p class="muted">Sin ChatGPT, sin Claude, sin "mejórame este texto". Si ves un error, es mío y me lo puedes decir en <a href={SOCIALS[0].url} target="_blank" rel="noopener">Instagram</a>.</p>
+        <p class="muted">Si ves un error, me lo puedes decir en <a href={SOCIALS[0].url} target="_blank" rel="noopener">Instagram</a>.</p>
       </div>
     </div>
   </article>

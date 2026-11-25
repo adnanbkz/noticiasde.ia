@@ -4,16 +4,16 @@
 
 export const SITE = {
   name: 'noticiasde.ia',
-  tagline: 'IA explicada por un developer, escrita a mano.',
+  tagline: 'IA explicada por un developer.',
   description:
-    'Blog de inteligencia artificial, cloud y desarrollo en español. Artículos escritos a mano por un software developer que va camino de AI & Cloud engineer.',
+    'Blog de inteligencia artificial, cloud y desarrollo en español. Artículos de un software developer que va camino de AI & Cloud engineer.',
 };
 
 export const AUTHOR = {
   name: 'Adnan',
   github: 'adnanbkz',
   role: 'Software developer · camino a AI & Cloud engineer',
-  bio: 'Llevo 2 años programando de forma profesional. Ahora estoy aprendiendo en público todo lo que necesito para ser AI & Cloud engineer: modelos, agentes, infraestructura y despliegue. Aquí lo cuento sin humo y sin IA escribiendo por mí.',
+  bio: 'Llevo 2 años programando de forma profesional. Ahora estoy aprendiendo en público todo lo que necesito para ser AI & Cloud engineer: modelos, agentes, infraestructura y despliegue. Aquí lo cuento sin humo.',
   photo: '/redes/adnan.webp' as string | null,
 };
 
