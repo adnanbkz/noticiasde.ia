@@ -5,6 +5,7 @@ date: 2026-11-24
 category: seguridad
 tags: ["AlphaProof Code", "DeepMind", "Signal", "verificación formal", "Lean"]
 featured: true
+reelCover: "/img/reels/alphaproof-code-signal.webp"
 ---
 
 Esta semana subí un reel que empezaba con una frase pensada para asustar: "una IA de Google se ha metido dentro de Signal". Suena a hackeo, pero es justo lo contrario. Aquí va la versión larga, con calma y con los matices que en un minuto de vídeo no caben.
