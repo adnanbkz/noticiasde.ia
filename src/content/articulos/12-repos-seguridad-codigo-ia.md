@@ -5,7 +5,6 @@ date: 2026-11-17
 category: seguridad
 tags: ["github", "open source", "agentes", "devsecops", "pentesting"]
 featured: true
-reelCover: "/img/reels/12-repos-seguridad-codigo-ia.webp"
 ---
 
 Tu agente de IA escribe código más rápido de lo que nadie puede revisarlo. Y cada línea que pasa sin revisar es una puerta que puede quedarse abierta: una consulta SQL montada a mano, una clave de API pegada en el código, un `eval` que nadie vio.
