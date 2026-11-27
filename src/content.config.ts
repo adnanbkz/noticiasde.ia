@@ -15,6 +15,8 @@ const articulos = defineCollection({
     cover: z.string().optional(),
     // Enlace al reel / vídeo relacionado
     reel: z.string().url().optional(),
+    // Portada (miniatura) del vídeo, ruta en /public
+    reelCover: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });
